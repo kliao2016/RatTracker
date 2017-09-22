@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "31361611803",
+    "firebase_url": "https://rattracker-bfffd.firebaseio.com",
+    "project_id": "rattracker-bfffd",
+    "storage_bucket": "rattracker-bfffd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31361611803:android:cc7b3f96dfe92e21",
+        "android_client_info": {
+          "package_name": "edu.gatech.cs2340.rattracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "31361611803-2oisud1udnek5jpucoes63vtt63qrpgp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.gatech.cs2340.rattracker",
+            "certificate_hash": "21a7eff07bad8ade735641740ce2ea80a257ae7f"
+          }
+        },
+        {
+          "client_id": "31361611803-5cf4au19gjq7ctg1uroutpa9bet528jh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTI6ki0eO77xQThhUoUSY_1nNIZT6fV3s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "31361611803-5cf4au19gjq7ctg1uroutpa9bet528jh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
