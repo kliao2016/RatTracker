@@ -75,6 +75,9 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    /*
+        Create custom alert dialog popup
+     */
     private void generateLoginAlert(int title, int message) {
         AlertDialog.Builder loginAlertBuilder = new AlertDialog.Builder(this);
         loginAlertBuilder.setTitle(title)
@@ -90,6 +93,9 @@ public class LoginActivity extends AppCompatActivity {
         loginAlert.show();
     }
 
+    /*
+        Check if edit text fields are empty
+     */
     private boolean isEmpty(EditText editText) {
         return editText.getText().toString().trim().length() == 0;
     }
