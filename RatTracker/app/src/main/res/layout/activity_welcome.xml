@@ -4,6 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.gatech.cs2340.rattracker.WelcomeActivity">
+    tools:context="edu.gatech.cs2340.rattracker.WelcomeActivity"
+    android:background="@color/colorPrimary">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="Login"
+        tools:layout_editor_absoluteX="67dp"
+        tools:layout_editor_absoluteY="297dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:text="Sign Up"
+        tools:layout_editor_absoluteX="67dp"
+        tools:layout_editor_absoluteY="373dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome, U Dirty Rat"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        tools:layout_editor_absoluteX="34dp"
+        tools:layout_editor_absoluteY="37dp" />
+
+    <ImageView
+        android:layout_width="134dp"
+        android:layout_height="127dp"
+        android:src="@drawable/rat_headass"
+        tools:layout_editor_absoluteY="126dp"
+        tools:layout_editor_absoluteX="125dp" />
 
 </android.support.constraint.ConstraintLayout>
