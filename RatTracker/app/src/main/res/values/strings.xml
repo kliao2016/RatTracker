@@ -8,5 +8,7 @@
     <string name="login_popup_title">Error Logging In</string>
     <string name="emptyfield_error_message">Username and password must have entries. Please try again.</string>
     <string name="emptyfield_error_title">All fields must be filled!</string>
+    <string name="login_success_title">Login Success!</string>
+    <string name="login_success_message">You have successfully logged in to RatTracker</string>
 
 </resources>

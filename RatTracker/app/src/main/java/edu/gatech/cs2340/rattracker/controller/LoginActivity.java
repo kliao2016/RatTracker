@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                             //TODO 3: Create segue to application here
                             LoginActivity.loginSuccess = true;
                             Log.d("Login Successful", "True");
+                            generateLoginAlert();
                         } else {
                             // If sign in fails, display a message to the user.
                             LoginActivity.loginSuccess = false;
