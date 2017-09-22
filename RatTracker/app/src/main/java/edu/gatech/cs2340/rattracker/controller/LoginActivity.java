@@ -37,11 +37,15 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signInUser(emailEditText.getText().toString(), passEditText.getText().toString());
+                if (!isEmpty(emailEditText) && !isEmpty(passEditText)) {
+                    signInUser(emailEditText.getText().toString(),
+                               passEditText.getText().toString());
+                } else {
+                    generateLoginAlert(R.string.emptyfield_error_title,
+                                       R.string.emptyfield_error_message);
+                }
             }
         });
-
-        //TODO 5: Add action for cancel button here
 
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance();
@@ -62,19 +66,19 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d("Login Successful", "True");
                         } else {
                             // If sign in fails, display a message to the user.
-                            //TODO 4: Create popup notifying sign in failure
                             LoginActivity.loginSuccess = false;
                             Log.d("Login Successful", "False");
-                            generateLoginAlert();
+                            generateLoginAlert(R.string.login_popup_title,
+                                               R.string.login_popup_text);
                         }
                     }
                 });
     }
 
-    private void generateLoginAlert() {
+    private void generateLoginAlert(int title, int message) {
         AlertDialog.Builder loginAlertBuilder = new AlertDialog.Builder(this);
-        loginAlertBuilder.setTitle("Error")
-                .setMessage(R.string.login_popup_text)
+        loginAlertBuilder.setTitle(title)
+                .setMessage(message)
                 .setPositiveButton(R.string.login_popup_button_text,
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -84,6 +88,10 @@ public class LoginActivity extends AppCompatActivity {
                         });
         AlertDialog loginAlert = loginAlertBuilder.create();
         loginAlert.show();
+    }
+
+    private boolean isEmpty(EditText editText) {
+        return editText.getText().toString().trim().length() == 0;
     }
 
 }
