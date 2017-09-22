@@ -38,8 +38,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:ems="10"
+            android:hint="USERNAME"
             android:inputType="textEmailAddress"
-            android:text="USERNAME"
             tools:layout_editor_absoluteX="62dp"
             tools:layout_editor_absoluteY="117dp" />
 
@@ -50,7 +50,7 @@
             android:layout_marginBottom="20dp"
             android:ems="10"
             android:inputType="textVisiblePassword"
-            android:text="PASSWORD"
+            android:hint="PASSWORD"
             tools:layout_editor_absoluteX="62dp"
             tools:layout_editor_absoluteY="205dp" />
 
