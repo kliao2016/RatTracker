@@ -2,4 +2,11 @@
     <string name="app_name">RatTracker</string>
     <string name="login_button_text">Login</string>
     <string name="cancel_button_text">Cancel</string>
+    <string name="login_page_text">Please enter username (email) and password below to login</string>
+    <string name="login_popup_text">The login information you entered was incorrect. Please try again.</string>
+    <string name="login_popup_button_text">Dismiss</string>
+    <string name="login_popup_title">Error Logging In</string>
+    <string name="emptyfield_error_message">Username and password must have entries. Please try again.</string>
+    <string name="emptyfield_error_title">All fields must be filled!</string>
+
 </resources>

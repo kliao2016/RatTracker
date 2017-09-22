@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:gravity="center_horizontal"
-            android:text="Enter Email and Password Below to Login" />
+            android:text="@string/login_page_text" />
 
         <EditText
             android:id="@+id/emailEditText"
@@ -39,7 +39,7 @@
             android:layout_marginBottom="20dp"
             android:ems="10"
             android:inputType="textEmailAddress"
-            android:text="EMAIL"
+            android:text="USERNAME"
             tools:layout_editor_absoluteX="62dp"
             tools:layout_editor_absoluteY="117dp" />
 
