@@ -1,5 +1,7 @@
 package edu.gatech.cs2340.rattracker;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -63,9 +65,25 @@ public class LoginActivity extends AppCompatActivity {
                             //TODO 4: Create popup notifying sign in failure
                             LoginActivity.loginSuccess = false;
                             Log.d("Login Successful", "False");
+                            generateLoginAlert();
                         }
                     }
                 });
+    }
+
+    private void generateLoginAlert() {
+        AlertDialog.Builder loginAlertBuilder = new AlertDialog.Builder(this);
+        loginAlertBuilder.setTitle("Error")
+                .setMessage(R.string.login_popup_text)
+                .setPositiveButton(R.string.login_popup_button_text,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int id) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+        AlertDialog loginAlert = loginAlertBuilder.create();
+        loginAlert.show();
     }
 
 }
