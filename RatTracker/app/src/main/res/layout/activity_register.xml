@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/register_button_text"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 tools:layout_editor_absoluteX="62dp"
                 tools:layout_editor_absoluteY="315dp"
                 android:background="@color/buttonGold" />
@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/cancel_button_text"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 tools:layout_editor_absoluteX="179dp"
                 tools:layout_editor_absoluteY="315dp"
                 android:background="@color/buttonGold" />
