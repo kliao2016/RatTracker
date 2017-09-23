@@ -67,6 +67,8 @@ public class LoginActivity extends AppCompatActivity {
                             //TODO 3: Create segue to application here
                             LoginActivity.loginSuccess = true;
                             Log.d("Login Successful", "True");
+                            generateLoginAlert(R.string.login_success_title,
+                                               R.string.login_success_message);
                         } else {
                             // If sign in fails, display a message to the user.
                             LoginActivity.loginSuccess = false;
@@ -85,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
         AlertDialog.Builder loginAlertBuilder = new AlertDialog.Builder(this);
         loginAlertBuilder.setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(R.string.login_popup_button_text,
+                .setPositiveButton(R.string.popup_button_dismiss,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int id) {
@@ -103,14 +105,4 @@ public class LoginActivity extends AppCompatActivity {
         return editText.getText().toString().trim().length() == 0;
     }
 
-    /*
-        Hide keyboard if anywhere besides EditText field is tapped
-     */
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        InputMethodManager manager = (InputMethodManager)getSystemService(Context.
-                INPUT_METHOD_SERVICE);
-        manager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        return true;
-    }
 }
