@@ -22,5 +22,8 @@
     <string name="register_success_title">Registration Success!</string>
     <string name="register_success_message">You have successfully registered for RatTracker.</string>
 
+    <!-- Welcom Strings -->
+    <string name="welcome_main_title">Welcome, U Dirty Rat</string>
+
 
 </resources>

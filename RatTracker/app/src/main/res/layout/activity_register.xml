@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context="edu.gatech.cs2340.rattracker.RegisterActivity"
     tools:layout_editor_absoluteY="81dp"
-    android:background="@color/lightBlue"
     tools:layout_editor_absoluteX="0dp">
 
     <LinearLayout
@@ -67,9 +66,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/register_button_text"
+                android:layout_marginRight="5dp"
                 tools:layout_editor_absoluteX="62dp"
                 tools:layout_editor_absoluteY="315dp"
-                android:background="?android:attr/selectableItemBackground" />
+                android:background="@color/buttonGold" />
 
             <Button
                 android:id="@+id/cancelRegisterButton"
@@ -77,9 +77,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/cancel_button_text"
+                android:layout_marginLeft="5dp"
                 tools:layout_editor_absoluteX="179dp"
                 tools:layout_editor_absoluteY="315dp"
-                android:background="?android:attr/selectableItemBackground" />
+                android:background="@color/buttonGold" />
 
         </LinearLayout>
 
