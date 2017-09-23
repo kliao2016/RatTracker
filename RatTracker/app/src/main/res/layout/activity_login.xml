@@ -39,6 +39,9 @@
             android:layout_marginBottom="20dp"
             android:ems="10"
             android:hint="USERNAME"
+            android:drawableLeft="@drawable/icons8_usericon_48"
+            android:drawablePadding="8dp"
+            android:padding="10dp"
             android:inputType="textEmailAddress"
             tools:layout_editor_absoluteX="62dp"
             tools:layout_editor_absoluteY="117dp" />
@@ -51,6 +54,9 @@
             android:ems="10"
             android:inputType="textVisiblePassword"
             android:hint="PASSWORD"
+            android:drawableLeft="@drawable/icons8_password_48"
+            android:drawablePadding="8dp"
+            android:padding="10dp"
             tools:layout_editor_absoluteX="62dp"
             tools:layout_editor_absoluteY="205dp" />
 
