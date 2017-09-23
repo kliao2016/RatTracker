@@ -1,4 +1,4 @@
-package edu.gatech.cs2340.rattracker;
+package edu.gatech.cs2340.rattracker.controller;
 
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import edu.gatech.cs2340.rattracker.R;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

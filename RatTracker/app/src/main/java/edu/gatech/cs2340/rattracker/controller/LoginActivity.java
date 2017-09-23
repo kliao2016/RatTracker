@@ -1,4 +1,4 @@
-package edu.gatech.cs2340.rattracker;
+package edu.gatech.cs2340.rattracker.controller;
 
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
@@ -12,6 +12,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import edu.gatech.cs2340.rattracker.R;
 
 public class LoginActivity extends AppCompatActivity {
 

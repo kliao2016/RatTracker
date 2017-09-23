@@ -1,7 +1,8 @@
-package edu.gatech.cs2340.rattracker;
+package edu.gatech.cs2340.rattracker.controller;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import edu.gatech.cs2340.rattracker.R;
 
 public class WelcomeActivity extends AppCompatActivity {
 
