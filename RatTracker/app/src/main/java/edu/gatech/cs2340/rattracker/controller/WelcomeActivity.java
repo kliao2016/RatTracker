@@ -21,14 +21,4 @@ public class WelcomeActivity extends AppCompatActivity {
         welcomeLoginButton = ((Button) findViewById(R.id.welcomeLoginButton));
         welcomeRegisterButton = ((Button) findViewById(R.id.welcomeSignUp));
     }
-
-    private void goToLogin() {
-        Intent loginIntent = new Intent(this, LoginActivity.class);
-        startActivity(loginIntent);
-    }
-
-    private void goToSignUp() {
-        Intent signUpIntent = new Intent(this, RegisterActivity.class);
-        startActivity(signUpIntent);
-    }
 }
