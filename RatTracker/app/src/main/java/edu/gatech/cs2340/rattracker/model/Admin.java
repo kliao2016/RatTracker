@@ -14,6 +14,6 @@ public class Admin extends User {
         user.locked = false;
     }
     public void lock(User user) {
-        user.locked = true;
+        user.setLocked(true);
     }
 }
