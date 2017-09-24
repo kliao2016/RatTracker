@@ -38,7 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!isEmpty(createUsernameEditText) && !isEmpty(createUsernameEditText)) {
+                if (!isEmpty(createUsernameEditText) && !isEmpty(createPassEditText)) {
                     createUserAccount(createUsernameEditText.getText().toString(),
                             createPassEditText.getText().toString());
                 } else {
