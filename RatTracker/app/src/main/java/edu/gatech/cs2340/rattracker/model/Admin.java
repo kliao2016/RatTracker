@@ -10,10 +10,6 @@ public class Admin extends User {
         //TODO implement
         return false;
     }
-    public void unlock(User user) {
-        user.locked = false;
-    }
-    public void lock(User user) {
-        user.setLocked(true);
-    }
+    public void unlock(User user) { user.setLocked(false); }
+    public void lock(User user) { user.setLocked(true); }
 }

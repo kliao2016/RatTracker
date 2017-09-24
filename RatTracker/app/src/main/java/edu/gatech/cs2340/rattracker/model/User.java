@@ -30,7 +30,7 @@ public class User {
         return this.locked;
     }
 
-    public boolean setLocked(boolean lockedValue) { this.locked = lockedValue; }
+    public void setLocked(boolean lockedValue) { this.locked = lockedValue; }
 
     public void setUsername(String newUsername) {
         this.username = newUsername;
