@@ -40,11 +40,18 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (!isEmpty(createUsernameEditText) && !isEmpty(createUsernameEditText)) {
                     createUserAccount(createUsernameEditText.getText().toString(),
-                            createUsernameEditText.getText().toString());
+                            createPassEditText.getText().toString());
                 } else {
                     generateLoginAlert(R.string.emptyfield_error_title,
                             R.string.emptyfield_error_message);
                 }
+            }
+        });
+
+        cancelRegisterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 

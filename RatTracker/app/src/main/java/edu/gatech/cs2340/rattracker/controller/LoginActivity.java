@@ -48,6 +48,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        cancelLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance();
     }
