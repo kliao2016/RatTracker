@@ -48,13 +48,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        cancelRegisterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance();
     }
