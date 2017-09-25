@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     tools:context="edu.gatech.cs2340.rattracker.controller.RegisterActivity"
     tools:layout_editor_absoluteY="81dp"
-    tools:layout_editor_absoluteX="0dp">
+    tools:layout_editor_absoluteX="0dp"
+    android:background="@color/deepBlue">
 
     <LinearLayout
         android:id="@+id/register_linear_layout"
@@ -30,6 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:gravity="center_horizontal"
+            android:textColor="#ffff"
             android:text="@string/register_page_text" />
 
         <EditText
@@ -42,6 +44,7 @@
             android:drawablePadding="8dp"
             android:padding="10dp"
             android:inputType="textEmailAddress"
+            android:textColorHint="#ffff"
             android:hint="Choose username"
             tools:layout_editor_absoluteX="62dp"
             tools:layout_editor_absoluteY="117dp" />
@@ -57,8 +60,21 @@
             android:padding="10dp"
             android:inputType="textPassword"
             android:hint="Choose password"
+            android:textColorHint="#ffff"
             tools:layout_editor_absoluteX="62dp"
             tools:layout_editor_absoluteY="205dp" />
+
+        <ImageView
+            android:id="@+id/mainWelcomeImage"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="0dp"
+            android:layout_weight="0.35"
+            android:src="@drawable/rats_on_pipe"
+            tools:layout_editor_absoluteX="125dp"
+            tools:layout_editor_absoluteY="126dp"
+            android:layout_marginBottom="20dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
