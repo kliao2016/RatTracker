@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         cancelLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToWelcome();
+                finish();
                 emailEditText.setText("");
                 passEditText.setText("");
             }
@@ -73,16 +73,13 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            //TODO 3: Create segue to application here
                             LoginActivity.loginSuccess = true;
-                            Log.d("Login Successful", "True");
                             loginSuccess = true;
                             generateLoginAlert(R.string.login_success_title,
                                                R.string.login_success_message);
                         } else {
                             // If sign in fails, display a message to the user.
                             LoginActivity.loginSuccess = false;
-                            Log.d("Login Successful", "False");
                             generateLoginAlert(R.string.login_popup_title,
                                                R.string.login_popup_text);
                         }
@@ -116,10 +113,6 @@ public class LoginActivity extends AppCompatActivity {
      */
     private boolean isEmpty(EditText editText) {
         return editText.getText().toString().trim().length() == 0;
-    }
-
-    private void goToWelcome() {
-        finish();
     }
 
     private void goToMain() {

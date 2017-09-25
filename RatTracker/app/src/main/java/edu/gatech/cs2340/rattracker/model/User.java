@@ -1,3 +1,5 @@
+package edu.gatech.cs2340.rattracker.model;
+
 public class User {
 
     private String username, password, email;

@@ -39,13 +39,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:ems="10"
-            android:drawableLeft="@drawable/icons8_usericon_48"
             android:drawablePadding="8dp"
-            android:padding="10dp"
+            android:drawableStart="@drawable/icons8_usericon_48"
+            android:ems="10"
+            android:hint="Choose email"
             android:inputType="textEmailAddress"
-            android:textColorHint="#ffff"
-            android:hint="Choose username"
+            android:padding="10dp"
+            android:textColorHint="#ffffff"
+            android:textColor="#ffffff"
             tools:layout_editor_absoluteX="62dp"
             tools:layout_editor_absoluteY="117dp" />
 
@@ -55,12 +56,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:ems="10"
-            android:drawableLeft="@drawable/icons8_password_48"
+            android:drawableStart="@drawable/icons8_password_48"
             android:drawablePadding="8dp"
             android:padding="10dp"
             android:inputType="textPassword"
             android:hint="Choose password"
-            android:textColorHint="#ffff"
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
             tools:layout_editor_absoluteX="62dp"
             tools:layout_editor_absoluteY="205dp" />
 
@@ -69,14 +71,14 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:layout_marginTop="0dp"
+            android:layout_marginBottom="20dp"
             android:layout_weight="0.35"
             android:src="@drawable/rats_on_pipe"
             tools:layout_editor_absoluteX="125dp"
-            tools:layout_editor_absoluteY="126dp"
-            android:layout_marginBottom="20dp" />
+            tools:layout_editor_absoluteY="126dp" />
 
         <LinearLayout
+            android:id="@+id/registerButtonLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical|fill_horizontal"
@@ -86,23 +88,23 @@
                 android:id="@+id/registerButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/register_button_text"
                 android:layout_marginEnd="5dp"
+                android:layout_weight="1"
+                android:background="@color/buttonGold"
+                android:text="@string/register_button_text"
                 tools:layout_editor_absoluteX="62dp"
-                tools:layout_editor_absoluteY="315dp"
-                android:background="@color/buttonGold" />
+                tools:layout_editor_absoluteY="315dp" />
 
             <Button
                 android:id="@+id/cancelRegisterButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/cancel_button_text"
                 android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:background="@color/buttonGold"
+                android:text="@string/cancel_button_text"
                 tools:layout_editor_absoluteX="179dp"
-                tools:layout_editor_absoluteY="315dp"
-                android:background="@color/buttonGold" />
+                tools:layout_editor_absoluteY="315dp" />
 
         </LinearLayout>
 

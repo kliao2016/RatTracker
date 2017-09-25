@@ -52,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
         cancelRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToWelcome();
+                finish();
             }
         });
 
