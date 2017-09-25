@@ -55,7 +55,7 @@
             android:drawableLeft="@drawable/icons8_password_48"
             android:drawablePadding="8dp"
             android:padding="10dp"
-            android:inputType="textVisiblePassword"
+            android:inputType="textPassword"
             android:hint="Choose password"
             tools:layout_editor_absoluteX="62dp"
             tools:layout_editor_absoluteY="205dp" />

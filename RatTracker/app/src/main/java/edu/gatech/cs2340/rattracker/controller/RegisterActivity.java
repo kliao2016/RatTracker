@@ -1,6 +1,7 @@
 package edu.gatech.cs2340.rattracker.controller;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,6 +49,13 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        cancelRegisterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToWelcome();
+            }
+        });
+
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance();
     }
@@ -63,6 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             //TODO 1: Create segue to application here
+                            registerSuccess = true;
                             generateLoginAlert(R.string.register_success_title,
                                                R.string.register_success_message);
                         } else {
@@ -82,11 +91,15 @@ public class RegisterActivity extends AppCompatActivity {
         AlertDialog.Builder loginAlertBuilder = new AlertDialog.Builder(this);
         loginAlertBuilder.setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(R.string.popup_button_dismiss,
+                .setPositiveButton(R.string.popup_button_okay,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int id) {
                                 dialogInterface.dismiss();
+                                if (registerSuccess) {
+                                    goToLogin();
+                                }
+
                             }
                         });
         AlertDialog loginAlert = loginAlertBuilder.create();
@@ -98,6 +111,18 @@ public class RegisterActivity extends AppCompatActivity {
      */
     private boolean isEmpty(EditText editText) {
         return editText.getText().toString().trim().length() == 0;
+    }
+
+    private void goToLogin() {
+        Intent loginIntent = new Intent(this, LoginActivity.class);
+        startActivity(loginIntent);
+        finish();
+    }
+
+    private void goToWelcome() {
+        Intent welcomeIntent = new Intent(this, WelcomeActivity.class);
+        startActivity(welcomeIntent);
+        finish();
     }
 
 }

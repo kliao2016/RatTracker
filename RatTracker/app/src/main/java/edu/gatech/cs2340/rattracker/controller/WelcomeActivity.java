@@ -20,6 +20,20 @@ public class WelcomeActivity extends AppCompatActivity {
 
         welcomeLoginButton = ((Button) findViewById(R.id.welcomeLoginButton));
         welcomeRegisterButton = ((Button) findViewById(R.id.welcomeSignUp));
+
+        welcomeLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToLogin();
+            }
+        });
+
+        welcomeRegisterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToSignUp();
+            }
+        });
     }
 
     private void goToLogin() {
