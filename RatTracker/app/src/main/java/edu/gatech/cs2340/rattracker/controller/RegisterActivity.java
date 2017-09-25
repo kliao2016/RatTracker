@@ -70,13 +70,11 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onComplete(Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            //TODO 1: Create segue to application here
                             registerSuccess = true;
                             generateLoginAlert(R.string.register_success_title,
                                                R.string.register_success_message);
                         } else {
                             // If sign in fails, display a message to the user.
-                            //TODO 2: Create popup notifying sign in failure
                             generateLoginAlert(R.string.register_popup_title,
                                                R.string.register_popup_text);
                         }
@@ -120,8 +118,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void goToWelcome() {
-        Intent welcomeIntent = new Intent(this, WelcomeActivity.class);
-        startActivity(welcomeIntent);
         finish();
     }
 

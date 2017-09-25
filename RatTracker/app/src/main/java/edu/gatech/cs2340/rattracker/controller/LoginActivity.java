@@ -119,8 +119,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void goToWelcome() {
-        Intent intent = new Intent(this, WelcomeActivity.class);
-        startActivity(intent);
         finish();
     }
 
