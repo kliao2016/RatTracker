@@ -1,14 +1,29 @@
 <resources>
     <string name="app_name">RatTracker</string>
+
+    <!-- Login Strings -->
     <string name="login_button_text">Login</string>
     <string name="cancel_button_text">Cancel</string>
     <string name="login_page_text">Please enter username (email) and password below to login</string>
     <string name="login_popup_text">The login information you entered was incorrect. Please try again.</string>
-    <string name="login_popup_button_text">Dismiss</string>
+    <string name="popup_button_dismiss">Dismiss</string>
     <string name="login_popup_title">Error Logging In</string>
     <string name="emptyfield_error_message">Username and password must have entries. Please try again.</string>
     <string name="emptyfield_error_title">All fields must be filled!</string>
     <string name="login_success_title">Login Success!</string>
     <string name="login_success_message">You have successfully logged in to RatTracker.</string>
+
+    <!-- Register Strings -->
+    <string name="register_button_text">Sign Up</string>
+    <string name="cancelRegistration_button_text">Cancel</string>
+    <string name="register_page_text">Please enter username (email) and password below to sign up</string>
+    <string name="register_popup_title">Error Registering</string>
+    <string name="register_popup_text">The information entered is invalid. Please try again.</string>
+    <string name="register_success_title">Registration Success!</string>
+    <string name="register_success_message">You have successfully registered for RatTracker.</string>
+
+    <!-- Welcome Strings -->
+    <string name="welcome_main_title">Welcome, U Dirty Rat</string>
+
 
 </resources>
