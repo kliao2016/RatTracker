@@ -1,6 +1,7 @@
 package edu.gatech.cs2340.rattracker.controller;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -48,6 +49,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        cancelLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToWelcome();
+                emailEditText.setText("");
+                passEditText.setText("");
+            }
+        });
+
+
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance();
     }
@@ -65,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
                             //TODO 3: Create segue to application here
                             LoginActivity.loginSuccess = true;
                             Log.d("Login Successful", "True");
+                            loginSuccess = true;
                             generateLoginAlert(R.string.login_success_title,
                                                R.string.login_success_message);
                         } else {
@@ -85,11 +97,14 @@ public class LoginActivity extends AppCompatActivity {
         AlertDialog.Builder loginAlertBuilder = new AlertDialog.Builder(this);
         loginAlertBuilder.setTitle(title)
                 .setMessage(message)
-                .setPositiveButton(R.string.popup_button_dismiss,
+                .setPositiveButton(R.string.popup_button_okay,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int id) {
                                 dialogInterface.dismiss();
+                                if (loginSuccess) {
+                                    goToMain();
+                                }
                             }
                         });
         AlertDialog loginAlert = loginAlertBuilder.create();
@@ -103,4 +118,15 @@ public class LoginActivity extends AppCompatActivity {
         return editText.getText().toString().trim().length() == 0;
     }
 
+    private void goToWelcome() {
+        Intent intent = new Intent(this, WelcomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void goToMain() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
