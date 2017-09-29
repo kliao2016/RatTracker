@@ -14,16 +14,17 @@
         android:id="@+id/register_linear_layout"
         android:layout_width="344dp"
         android:layout_height="495dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_vertical|center_horizontal"
         android:orientation="vertical"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/registerTextView"
@@ -31,22 +32,23 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:gravity="center_horizontal"
-            android:textColor="#ffff"
-            android:text="@string/register_page_text" />
+            android:text="@string/register_page_text"
+            android:textColor="#ffff" />
 
         <EditText
             android:id="@+id/createUsernameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:drawablePadding="8dp"
             android:drawableStart="@drawable/icons8_usericon_48"
-            android:ems="10"
             android:hint="Choose email"
             android:inputType="textEmailAddress"
             android:padding="10dp"
             android:textColorHint="#ffffff"
             android:textColor="#ffffff"
+            android:drawableLeft="@drawable/icons8_usericon_48"
+            android:drawablePadding="8dp"
+            android:ems="10"
             tools:layout_editor_absoluteX="62dp"
             tools:layout_editor_absoluteY="117dp" />
 
@@ -58,13 +60,37 @@
             android:ems="10"
             android:drawableStart="@drawable/icons8_password_48"
             android:drawablePadding="8dp"
-            android:padding="10dp"
-            android:inputType="textPassword"
             android:hint="Choose password"
             android:textColor="#ffffff"
             android:textColorHint="#ffffff"
+            android:inputType="textPassword"
+            android:padding="10dp"
             tools:layout_editor_absoluteX="62dp"
             tools:layout_editor_absoluteY="205dp" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:onClick="onRadioButtonClicked"
+                android:text="User" />
+
+            <RadioButton
+                android:id="@+id/radio_admin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5"
+                android:onClick="onRadioButtonClicked"
+                android:text="Admin" />
+
+        </RadioGroup>
 
         <ImageView
             android:id="@+id/mainWelcomeImage"
@@ -72,9 +98,10 @@
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:layout_marginBottom="20dp"
-            android:layout_weight="0.35"
+            android:layout_marginTop="0dp"
+            android:layout_weight="1"
             android:src="@drawable/rats_on_pipe"
-            tools:layout_editor_absoluteX="125dp"
+            tools:layout_editor_absoluteX="126dp"
             tools:layout_editor_absoluteY="126dp" />
 
         <LinearLayout
