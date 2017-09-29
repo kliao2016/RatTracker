@@ -53,6 +53,8 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+                createUsernameEditText.setText("");
+                createPassEditText.setText("");
             }
         });
 
