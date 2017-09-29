@@ -34,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
     }
 
+    /**
+     * Method to return to the welcome screen upon logging out
+     */
     public void goToWelcome() {
         Intent intent = new Intent(this, WelcomeActivity.class);
         startActivity(intent);

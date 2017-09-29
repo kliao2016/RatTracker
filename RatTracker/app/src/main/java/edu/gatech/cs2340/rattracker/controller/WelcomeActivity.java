@@ -36,11 +36,17 @@ public class WelcomeActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Method to go to the login activity
+     */
     private void goToLogin() {
         Intent goToLogin = new Intent(this, LoginActivity.class);
         startActivity(goToLogin);
     }
 
+    /**
+     * Method to go to the register activity
+     */
     private void goToSignUp() {
         Intent goToRegister = new Intent(this, RegisterActivity.class);
         startActivity(goToRegister);

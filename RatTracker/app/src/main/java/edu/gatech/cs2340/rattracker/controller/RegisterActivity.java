@@ -120,14 +120,12 @@ public class RegisterActivity extends AppCompatActivity {
         return editText.getText().toString().trim().length() == 0;
     }
 
+    /**
+     * Method to go to the login activity and end the current activity
+     */
     private void goToLogin() {
         Intent loginIntent = new Intent(this, LoginActivity.class);
         startActivity(loginIntent);
         finish();
     }
-
-    private void goToWelcome() {
-        finish();
-    }
-
 }

@@ -124,6 +124,9 @@ public class LoginActivity extends AppCompatActivity {
         return editText.getText().toString().trim().length() == 0;
     }
 
+    /**
+     * Method to go to the main screen of the app upon logging in
+     */
     private void goToMain() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
