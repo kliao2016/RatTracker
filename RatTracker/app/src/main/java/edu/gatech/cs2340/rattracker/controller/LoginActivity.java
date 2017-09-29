@@ -63,8 +63,11 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
     }
 
-    /*
-        Method to check if login credentials are accurate and to log users in
+    /**
+     * Method to check if login credentials are accurate and to log users in
+     *
+     * @param email the email entered by the user
+     * @param password the password entered by the user
      */
     private void signInUser(String email, String password) {
         this.auth.signInWithEmailAndPassword(email, password)
@@ -87,8 +90,11 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    /*
-        Create custom alert dialog popup
+    /**
+     * Method to create custom alert dialog popup
+     *
+     * @param title the title of the alert
+     * @param message the message of the alert
      */
     private void generateLoginAlert(int title, int message) {
         AlertDialog.Builder loginAlertBuilder = new AlertDialog.Builder(this);
@@ -108,8 +114,11 @@ public class LoginActivity extends AppCompatActivity {
         loginAlert.show();
     }
 
-    /*
-        Check if edit text fields are empty
+    /**
+     * Method to check if an EditText field is empty
+     *
+     * @param editText the EditText field to check
+     * @return true if the EditText field is empty and false otherwise
      */
     private boolean isEmpty(EditText editText) {
         return editText.getText().toString().trim().length() == 0;

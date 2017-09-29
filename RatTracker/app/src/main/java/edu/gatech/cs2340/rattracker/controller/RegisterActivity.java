@@ -60,8 +60,11 @@ public class RegisterActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
     }
 
-    /*
-        Method to create user account based on inputted info
+    /**
+     * Method to create a new user account based on the passed in information
+     *
+     * @param email the email to be associated with the user account
+     * @param password the password to be associated with the user account
      */
     private void createUserAccount(String email, String password) {
         this.auth.createUserWithEmailAndPassword(email, password)
@@ -82,8 +85,11 @@ public class RegisterActivity extends AppCompatActivity {
                 });
     }
 
-    /*
-        Create custom alert dialog popup
+    /**
+     * Method to create custom alert dialog popup
+     *
+     * @param title the title of the alert
+     * @param message the message of the alert
      */
     private void generateLoginAlert(int title, int message) {
         AlertDialog.Builder loginAlertBuilder = new AlertDialog.Builder(this);
@@ -104,8 +110,11 @@ public class RegisterActivity extends AppCompatActivity {
         loginAlert.show();
     }
 
-    /*
-        Check if edit text fields are empty
+    /**
+     * Method to check if an EditText field is empty
+     *
+     * @param editText the EditText field to check
+     * @return true if the EditText field is empty and false otherwise
      */
     private boolean isEmpty(EditText editText) {
         return editText.getText().toString().trim().length() == 0;
