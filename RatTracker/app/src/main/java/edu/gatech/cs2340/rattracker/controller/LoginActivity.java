@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import edu.gatech.cs2340.rattracker.R;
 import edu.gatech.cs2340.rattracker.model.User;
+import edu.gatech.cs2340.rattracker.model.Admin;
 
 public class LoginActivity extends AppCompatActivity {
 

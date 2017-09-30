@@ -36,8 +36,8 @@ public class RegisterActivity extends AppCompatActivity {
     private RadioButton chosenRadioButton;
     private FirebaseAuth auth;
     private static boolean registerSuccess = false;
-    private DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
-    private FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    private DatabaseReference databaseRef;
+    private FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        // Initialize Firebase Auth
+        // Initialize Firebase fields
+        databaseRef = FirebaseDatabase.getInstance().getReference();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         auth = FirebaseAuth.getInstance();
     }
 
@@ -190,5 +192,7 @@ public class RegisterActivity extends AppCompatActivity {
                         });
             }
         }
+
     }
+
 }
