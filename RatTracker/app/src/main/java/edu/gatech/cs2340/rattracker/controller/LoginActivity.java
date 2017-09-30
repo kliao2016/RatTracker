@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +13,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import edu.gatech.cs2340.rattracker.R;
+import edu.gatech.cs2340.rattracker.model.User;
+import edu.gatech.cs2340.rattracker.model.Admin;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -23,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passEditText;
     private FirebaseAuth auth;
     private static boolean loginSuccess = false;
+    public User user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,8 +42,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (!isEmpty(emailEditText) && !isEmpty(passEditText)) {
-                    signInUser(emailEditText.getText().toString(),
-                               passEditText.getText().toString());
+                    signInUser(emailEditText.getText().toString().trim(),
+                               passEditText.getText().toString().trim());
                 } else {
                     generateLoginAlert(R.string.emptyfield_error_title,
                                        R.string.emptyfield_error_message);
@@ -69,20 +71,20 @@ public class LoginActivity extends AppCompatActivity {
      * @param email the email entered by the user
      * @param password the password entered by the user
      */
-    private void signInUser(String email, String password) {
+    private void signInUser(final String email, final String password) {
         this.auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            LoginActivity.loginSuccess = true;
                             loginSuccess = true;
                             generateLoginAlert(R.string.login_success_title,
                                                R.string.login_success_message);
+                            user = new User("Username", password, email);
                         } else {
                             // If sign in fails, display a message to the user.
-                            LoginActivity.loginSuccess = false;
+                            loginSuccess = false;
                             generateLoginAlert(R.string.login_popup_title,
                                                R.string.login_popup_text);
                         }
@@ -132,4 +134,5 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
 }

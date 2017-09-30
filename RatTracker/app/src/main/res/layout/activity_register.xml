@@ -46,7 +46,6 @@
             android:padding="10dp"
             android:textColorHint="#ffffff"
             android:textColor="#ffffff"
-            android:drawableLeft="@drawable/icons8_usericon_48"
             android:drawablePadding="8dp"
             android:ems="10"
             tools:layout_editor_absoluteX="62dp"
@@ -63,12 +62,13 @@
             android:hint="Choose password"
             android:textColor="#ffffff"
             android:textColorHint="#ffffff"
-            android:inputType="textPassword"
+            android:inputType="textVisiblePassword"
             android:padding="10dp"
             tools:layout_editor_absoluteX="62dp"
             tools:layout_editor_absoluteY="205dp" />
 
         <RadioGroup
+            android:id="@+id/userAdminRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -76,18 +76,20 @@
 
             <RadioButton
                 android:id="@+id/radio_user"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:onClick="onRadioButtonClicked"
+                android:textColor="#ffffff"
+                android:buttonTint="#ffffff"
+                android:layout_marginEnd="25dp"
                 android:text="User" />
 
             <RadioButton
                 android:id="@+id/radio_admin"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight=".5"
-                android:onClick="onRadioButtonClicked"
+                android:textColor="#ffffff"
+                android:buttonTint="#ffffff"
+                android:layout_marginStart="25dp"
                 android:text="Admin" />
 
         </RadioGroup>
@@ -101,6 +103,7 @@
             android:layout_marginTop="0dp"
             android:layout_weight="1"
             android:src="@drawable/rats_on_pipe"
+            android:padding="15dp"
             tools:layout_editor_absoluteX="126dp"
             tools:layout_editor_absoluteY="126dp" />
 

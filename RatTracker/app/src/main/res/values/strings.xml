@@ -22,6 +22,7 @@
     <string name="register_popup_text">The information entered is invalid. Email must be a valid email and password must be a minimum of 8 characters. Please try again.</string>
     <string name="register_success_title">Registration Success!</string>
     <string name="register_success_message">You have successfully registered for RatTracker.</string>
+    <string name="register_need_radio_message">Please check if you want to be a user or admin.</string>
 
     <!-- Welcome Strings -->
     <string name="welcome_main_title">Welcome, U Dirty Rat</string>

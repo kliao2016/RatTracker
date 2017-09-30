@@ -1,12 +1,15 @@
 package edu.gatech.cs2340.rattracker.controller;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import edu.gatech.cs2340.rattracker.model.User;
 
 import edu.gatech.cs2340.rattracker.R;
 
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
                 goToWelcome();
                 finishAffinity();
             }

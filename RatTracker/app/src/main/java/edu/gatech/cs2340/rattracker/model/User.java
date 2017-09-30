@@ -7,10 +7,11 @@ package edu.gatech.cs2340.rattracker.model;
 
 public class User {
 
-    private String username, password, email;
-    private Boolean locked;
+    private static String username, password, email;
+    private static boolean locked;
 
     /**
+     * Constructor to create user with indicated parameters
      *
      * @param username
      * @param password
@@ -32,7 +33,7 @@ public class User {
      * @param email
      */
     public User(String username, String password, String email) {
-        this(username,password,email, false);
+        this(username, password, email, false);
     }
 
     /**
