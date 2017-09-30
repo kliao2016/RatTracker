@@ -1,12 +1,11 @@
 package edu.gatech.cs2340.rattracker.controller;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import edu.gatech.cs2340.rattracker.model.User;
 
 import edu.gatech.cs2340.rattracker.R;
 

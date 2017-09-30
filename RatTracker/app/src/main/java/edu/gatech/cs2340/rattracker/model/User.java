@@ -7,21 +7,24 @@ package edu.gatech.cs2340.rattracker.model;
 
 public class User {
 
-    private String username, password, email;
-    private Boolean locked;
+    private static String username, password, email;
+    private static boolean locked;
+    private static boolean isAdmin;
 
     /**
+     * Constructor to create user with indicated parameters
      *
      * @param username
      * @param password
      * @param email
      * @param locked if the user has been locked out by an admin
      */
-    public User(String username, String password, String email, boolean locked) {
+    public User(String username, String password, String email, boolean locked, boolean isAdmin) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.locked = locked;
+        this.isAdmin = isAdmin;
     }
 
     /**
@@ -32,7 +35,7 @@ public class User {
      * @param email
      */
     public User(String username, String password, String email) {
-        this(username,password,email, false);
+        this(username, password, email, false, false);
     }
 
     /**

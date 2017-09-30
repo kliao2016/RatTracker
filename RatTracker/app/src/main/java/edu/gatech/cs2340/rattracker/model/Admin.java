@@ -6,7 +6,7 @@ package edu.gatech.cs2340.rattracker.model;
  */
 public class Admin extends User {
     /**
-     * constructor that sets up Admin with default locked status as false
+     * Constructor that sets up Admin with default locked status as false
      *
      * @param username
      * @param password
