@@ -85,8 +85,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Initialize Firebase fields
         databaseRef = FirebaseDatabase.getInstance().getReference();
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         auth = FirebaseAuth.getInstance();
+        firebaseUser = auth.getCurrentUser();
     }
 
     /**
@@ -162,32 +162,34 @@ public class RegisterActivity extends AppCompatActivity {
         Map<String, Object> userValues = new HashMap<>();
         userValues.put("email", email);
         userValues.put("password", password);
-        String userId = firebaseUser.getUid();
-        if (userId != null && chosenRadioButton != null) {
-            if (isAdmin.equals("User")) {
-                userValues.put("admin", "false");
-                databaseRef.child("users").child(userId).updateChildren(userValues,
-                        new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                        if (databaseError != null) {
-                            generateLoginAlert(R.string.register_popup_title,
-                                    R.string.register_popup_text);
-                        }
-                    }
-                });
-            } else {
-                userValues.put("admin", "true");
-                databaseRef.child("users").child(userId).updateChildren(userValues,
-                        new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                                if (databaseError != null) {
-                                    generateLoginAlert(R.string.register_popup_title,
-                                            R.string.register_popup_text);
+        if (firebaseUser != null) {
+            String userId = firebaseUser.getUid();
+            if (userId != null && chosenRadioButton != null) {
+                if (isAdmin.equals("User")) {
+                    userValues.put("admin", "false");
+                    databaseRef.child("users").child(userId).updateChildren(userValues,
+                            new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                    if (databaseError != null) {
+                                        generateLoginAlert(R.string.register_popup_title,
+                                                R.string.register_popup_text);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                } else {
+                    userValues.put("admin", "true");
+                    databaseRef.child("users").child(userId).updateChildren(userValues,
+                            new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                    if (databaseError != null) {
+                                        generateLoginAlert(R.string.register_popup_title,
+                                                R.string.register_popup_text);
+                                    }
+                                }
+                            });
+                }
             }
         }
 
