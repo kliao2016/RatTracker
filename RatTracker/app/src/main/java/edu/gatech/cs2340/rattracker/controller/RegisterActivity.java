@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -106,7 +105,6 @@ public class RegisterActivity extends AppCompatActivity {
                             registerSuccess = true;
                             generateLoginAlert(R.string.register_success_title,
                                                R.string.register_success_message);
-                            Log.d("Login Test", firebaseUser.getEmail());
                         } else {
                             // If sign in fails, display a message to the user.
                             generateLoginAlert(R.string.register_popup_title,
