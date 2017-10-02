@@ -86,7 +86,6 @@ public class RegisterActivity extends AppCompatActivity {
         // Initialize Firebase fields
         databaseRef = FirebaseDatabase.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
-        firebaseUser = auth.getCurrentUser();
     }
 
     /**
@@ -105,6 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
                             registerSuccess = true;
                             generateLoginAlert(R.string.register_success_title,
                                                R.string.register_success_message);
+                            firebaseUser = auth.getCurrentUser();
                         } else {
                             // If sign in fails, display a message to the user.
                             generateLoginAlert(R.string.register_popup_title,
