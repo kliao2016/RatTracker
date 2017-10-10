@@ -1,45 +1,85 @@
 package edu.gatech.cs2340.rattracker.controller;
 
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import edu.gatech.cs2340.rattracker.R;
 import edu.gatech.cs2340.rattracker.model.RatReport;
+
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-
-import com.google.firebase.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.src.main.java.com.firebase.ui.database.FirebaseRecyclerAdapter;
 
 /**
  * Created by Spencer on 10/9/2017.
  */
 
-public class ReportListActivity {
+public class ReportListActivity extends AppCompatActivity {
 
     Query query = FirebaseDatabase.getInstance().getReference()
             .child("reports")
             .limitToLast(25);
 
-    FirebaseRecyclerOptions<RatReport> options = //documentation used this but it's not in the API
+    FirebaseRecyclerOptions<RatReport> options =
             new FirebaseRecyclerOptions.Builder<RatReport>()
-            .setQuery(query, RatReport.class).
-            build();
+                    .setQuery(query, RatReport.class).
+                    build();
 
-    FirebaseRecyclerAdapter adapter = new FireBaseRecyclerAdapter<RatReport, ReportHolder>(options) {
+    FirebaseRecyclerAdapter adapter = new FirebaseRecyclerAdapter<RatReport, ReportViewHolder>(options) {
         @Override
-        public ReportHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ReportViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
             View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.key, parent, false);
+                    .inflate(R.layout.report_list_content, parent, false);
 
-            return new ReportHolder(view);
+            return new ReportViewHolder(view);
         }
 
         @Override
-        protected void onBindViewHolder(ReportHolder holder, int position, RatReport model) {
+        protected void onBindViewHolder(ReportViewHolder holder, int position, RatReport model) {
+            holder.report = (RatReport) adapter.getItem(position);
+
+            holder.leftText.setText("" + holder.report.getCreateDate());
+            holder.rightText.setText("" + holder.report.getBorough());
+        }
+    };
+
+    private class ReportViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private RatReport report;
+        private TextView leftText;
+        private TextView rightText;
+        private View view;
+
+        public ReportViewHolder(View view) {
+            super(view);
+            this.view = view;
+            leftText = (TextView) view.findViewById(R.id.dataOneText);
+            rightText = (TextView) view.findViewById(R.id.dataTwoText);
+        }
+
+
+        @Override
+        public void onClick(View view) {
 
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 }
