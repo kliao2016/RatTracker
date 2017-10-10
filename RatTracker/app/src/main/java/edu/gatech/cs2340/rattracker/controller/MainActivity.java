@@ -16,6 +16,7 @@ import edu.gatech.cs2340.rattracker.R;
 public class MainActivity extends AppCompatActivity {
 
     private Button logoutButton;
+    private Button ratReportButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         logoutButton = (Button) findViewById(R.id.logoutButton);
+        ratReportButton = (Button) findViewById(R.id.ratReportButton);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,6 +34,15 @@ public class MainActivity extends AppCompatActivity {
                 finishAffinity();
             }
         });
+
+        ratReportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToReports();
+                finishAffinity();
+            }
+        });
+
     }
 
     @Override
@@ -43,6 +54,15 @@ public class MainActivity extends AppCompatActivity {
      */
     public void goToWelcome() {
         Intent intent = new Intent(this, WelcomeActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
+     * Method to view rat reports from main screen
+     */
+    public void goToReports() {
+        Intent intent = new Intent(this, ReportListActivity.class);
         startActivity(intent);
         finish();
     }

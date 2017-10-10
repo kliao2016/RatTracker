@@ -29,6 +29,7 @@
 
     <!-- Main Strings -->
     <string name="logout_text">Logout</string>
+    <string name="rat_report_text">View Rat Reports</string>
 
 
 </resources>
