@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.gatech.cs2340.rattracker.controller.ReportListActivity"
+    android:orientation="horizontal"
+    android:gravity="center_vertical|fill_horizontal">
+
+    <TextView
+        android:id="@+id/dataOneText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_weight="1"
+        android:text="Data1PlaceHolder"
+        tools:layout_editor_absoluteX="62dp"
+        tools:layout_editor_absoluteY="315dp" />
+
+    <TextView
+        android:id="@+id/dataTwoText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_weight="1"
+        android:text="Data2PlaceHolder"
+        tools:layout_editor_absoluteX="62dp"
+        tools:layout_editor_absoluteY="315dp" />
+
+</LinearLayout>
