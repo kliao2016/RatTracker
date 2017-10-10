@@ -1,10 +1,11 @@
 package edu.gatech.cs2340.rattracker.controller;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -28,8 +29,18 @@ public class ReportListActivity extends AppCompatActivity {
 
     FirebaseRecyclerOptions<RatReport> options =
             new FirebaseRecyclerOptions.Builder<RatReport>()
-                    .setQuery(query, RatReport.class).
-                    build();
+                    .setQuery(query, RatReport.class).build();
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_report_list);
+
+        this.getWindow().setTitle("Reports");
+
+        RecyclerView recyclerReportView = findViewById(R.id.report_recyclerview);
+        recyclerReportView.setAdapter(adapter);
+    }
 
     FirebaseRecyclerAdapter adapter = new FirebaseRecyclerAdapter<RatReport, ReportViewHolder>(options) {
         @Override
@@ -45,12 +56,12 @@ public class ReportListActivity extends AppCompatActivity {
         protected void onBindViewHolder(ReportViewHolder holder, int position, RatReport model) {
             holder.report = (RatReport) adapter.getItem(position);
 
-            holder.leftText.setText("" + holder.report.getCreateDate());
+            holder.leftText.setText("" + holder.report.getDateCreated());
             holder.rightText.setText("" + holder.report.getBorough());
         }
     };
 
-    private class ReportViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ReportViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private RatReport report;
         private TextView leftText;

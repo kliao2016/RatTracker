@@ -5,21 +5,25 @@ package edu.gatech.cs2340.rattracker.model;
  */
 
 public class RatReport {
-    private String key;
-    private String createDate;
+    private String dateCreated;
     private String locationType;
-    private String incidentZip;
+    private double incidentZip;
     private String incidentAddress;
     private String city;
     private String borough;
-    private String latitude;
-    private String longitude;
+    private double latitude;
+    private double longitude;
+
+    /**
+     * No arg constructor for FirebaseUI
+     */
+    public RatReport() {}
 
     /**
      * Constructor to create Rat report with specific attributes
      *
      * @param key the unique key of the rat report
-     * @param createDate the date the rat report was created
+     * @param dateCreated the date the rat report was created
      * @param locationType the type of location where the rat was sighted
      * @param incidentZip the zipcode of the location where the rat was sighted
      * @param incidentAddress the address of the location where the rat was sighted
@@ -28,11 +32,10 @@ public class RatReport {
      * @param latitude the latitude of the coordinates where the rat was sighted
      * @param longitude the longitude of the coordinates where the rat was sighted
      */
-    public RatReport(String key, String createDate, String locationType, String incidentZip,
-                     String incidentAddress, String city, String borough, String latitude,
-                     String longitude) {
-        this.key = key;
-        this.createDate = createDate;
+    public RatReport(String dateCreated, String locationType, double incidentZip,
+                     String incidentAddress, String city, String borough, double latitude,
+                     double longitude) {
+        this.dateCreated = dateCreated;
         this.locationType = locationType;
         this.incidentZip = incidentZip;
         this.incidentAddress = incidentAddress;
@@ -43,19 +46,15 @@ public class RatReport {
     }
 
     // Getters
-    public String getKey() {
-        return this.key;
-    }
-
-    public String getCreateDate() {
-        return this.createDate;
+    public String getDateCreated() {
+        return this.dateCreated;
     }
 
     public String getLocationType() {
         return this.locationType;
     }
 
-    public String getIncidentZip() {
+    public double getIncidentZip() {
         return this.incidentZip;
     }
 
@@ -71,29 +70,25 @@ public class RatReport {
         return this.borough;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return this.latitude;
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return this.longitude;
     }
 
 
     // Setters
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
     public void setLocationType(String locationType) {
         this.locationType = locationType;
     }
 
-    public void setIncidentZip(String incidentZip) {
+    public void setIncidentZip(double incidentZip) {
         this.incidentZip = incidentZip;
     }
 
@@ -109,11 +104,11 @@ public class RatReport {
         this.borough = borough;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 }
