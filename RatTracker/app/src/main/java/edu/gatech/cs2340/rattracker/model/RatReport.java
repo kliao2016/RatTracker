@@ -110,7 +110,7 @@ public class RatReport {
     }
 
     public void setLatitude(String latitude) {
-        this.latitude = latitude
+        this.latitude = latitude;
     }
 
     public void setLongitude(String longitude) {
