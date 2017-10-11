@@ -150,4 +150,18 @@ public class RatReport implements Parcelable {
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
     }
+
+    /**
+     * Creator class defined for Parcelable implementation that generates instances of RatReport from passed in Parcels
+     */
+    public static final Parcelable.Creator<RatReport> CREATOR
+            = new Parcelable.Creator<RatReport>() {
+        public RatReport createFromParcel(Parcel in) {
+            return new RatReport(in);
+        }
+
+        public RatReport[] newArray(int size) {
+            return new RatReport[size];
+        }
+    };
 }

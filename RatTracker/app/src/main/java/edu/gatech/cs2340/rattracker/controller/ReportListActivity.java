@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import edu.gatech.cs2340.rattracker.R;
 import edu.gatech.cs2340.rattracker.model.RatReport;
@@ -50,7 +51,6 @@ public class ReportListActivity extends AppCompatActivity {
 
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.report_list_content, parent, false);
-            view.setPadding(15, 15, 15, 15);
 
             return new ReportViewHolder(view);
         }
@@ -61,6 +61,8 @@ public class ReportListActivity extends AppCompatActivity {
 
             holder.leftText.setText("" + holder.report.getDateCreated());
             holder.rightText.setText("" + holder.report.getBorough());
+
+
         }
     };
 
@@ -78,6 +80,7 @@ public class ReportListActivity extends AppCompatActivity {
             rightText = (TextView) view.findViewById(R.id.dataTwoText);
             leftText.setPadding(20, 20, 20, 20);
             rightText.setPadding(20, 20, 20, 20);
+            view.setOnClickListener(this);
         }
 
 
@@ -85,6 +88,8 @@ public class ReportListActivity extends AppCompatActivity {
         public void onClick(View view) {
             Context context = view.getContext();
             Intent intent = new Intent(context, ReportDetailsActivity.class);
+            intent.putExtra("RatReport", report);
+            startActivity(intent);
         }
     }
 
