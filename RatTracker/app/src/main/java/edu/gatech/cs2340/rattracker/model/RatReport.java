@@ -22,7 +22,6 @@ public class RatReport {
     /**
      * Constructor to create Rat report with specific attributes
      *
-     * @param key the unique key of the rat report
      * @param dateCreated the date the rat report was created
      * @param locationType the type of location where the rat was sighted
      * @param incidentZip the zipcode of the location where the rat was sighted
