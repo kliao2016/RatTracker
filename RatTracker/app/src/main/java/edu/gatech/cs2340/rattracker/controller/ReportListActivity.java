@@ -1,5 +1,7 @@
 package edu.gatech.cs2340.rattracker.controller;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -48,6 +50,7 @@ public class ReportListActivity extends AppCompatActivity {
 
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.report_list_content, parent, false);
+            view.setPadding(15, 15, 15, 15);
 
             return new ReportViewHolder(view);
         }
@@ -73,12 +76,15 @@ public class ReportListActivity extends AppCompatActivity {
             this.view = view;
             leftText = (TextView) view.findViewById(R.id.dataOneText);
             rightText = (TextView) view.findViewById(R.id.dataTwoText);
+            leftText.setPadding(20, 20, 20, 20);
+            rightText.setPadding(20, 20, 20, 20);
         }
 
 
         @Override
         public void onClick(View view) {
-
+            Context context = view.getContext();
+            Intent intent = new Intent(context, ReportDetailsActivity.class);
         }
     }
 
