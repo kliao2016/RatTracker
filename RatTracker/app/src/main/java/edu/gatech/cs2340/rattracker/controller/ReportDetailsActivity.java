@@ -32,7 +32,10 @@ public class ReportDetailsActivity extends AppCompatActivity {
         populateData(report);
     }
 
-
+    /**
+     * Obtains and displays the specifics of a report by updating the page's TextViews
+     * @param report the Rat Report to get the details from
+     */
     public void populateData(RatReport report) {
         TextView date = findViewById(R.id.dateCreated);
         TextView address = findViewById(R.id.address);
