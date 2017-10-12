@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 goToReports();
-                finishAffinity();
             }
         });
 
@@ -64,6 +63,5 @@ public class MainActivity extends AppCompatActivity {
     public void goToReports() {
         Intent intent = new Intent(this, ReportListActivity.class);
         startActivity(intent);
-        finish();
     }
 }

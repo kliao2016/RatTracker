@@ -24,7 +24,12 @@
         <activity android:name=".controller.LoginActivity" />
         <activity android:name=".controller.RegisterActivity" />
         <activity android:name=".controller.ReportListActivity" />
-        <activity android:name=".controller.MainActivity"></activity>
+        <activity android:name=".controller.MainActivity" />
+        <activity
+            android:name=".controller.ReportDetailsActivity"
+            android:label="@string/title_activity_report_details"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".controller.ReportListActivity"/>
     </application>
 
 </manifest>

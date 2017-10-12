@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.gatech.cs2340.rattracker.controller.ReportDetailsActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_report_details"
+        android:id="@+id/include" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="65sp"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/detailsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/report_details"
+            android:textAlignment="center"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/dateCreated"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:layout_marginTop="5sp"
+            android:layout_weight="0.03"
+            android:text="Date: "
+            android:textAlignment="center"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:layout_marginTop="5sp"
+            android:layout_weight="0.03"
+            android:text="Address: "
+            android:textAlignment="center"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/borough"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:layout_marginTop="5sp"
+            android:layout_weight="0.03"
+            android:text="Borough: "
+            android:textAlignment="center"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/locType"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:layout_marginTop="5sp"
+            android:layout_weight="0.03"
+            android:text="Location Type: "
+            android:textAlignment="center"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/lat"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:layout_marginTop="5sp"
+            android:layout_weight="0.03"
+            android:text="Latitude: "
+            android:textAlignment="center"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/lng"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:layout_marginTop="5sp"
+            android:layout_weight="0.03"
+            android:text="Longitude: "
+            android:textAlignment="center"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

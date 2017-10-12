@@ -1,10 +1,13 @@
 package edu.gatech.cs2340.rattracker.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by kevinliao on 10/7/17.
  */
 
-public class RatReport {
+public class RatReport implements Parcelable {
     private String dateCreated;
     private String locationType;
     private double incidentZip;
@@ -110,4 +113,55 @@ public class RatReport {
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
+
+    /**
+     * Constructor used by Parcel to make a RatReport out of the parceled information
+     * @param in the parcel containing the report information
+     */
+    private RatReport(Parcel in) {
+        dateCreated = in.readString();
+        locationType = in.readString();
+        incidentZip = in.readDouble();
+        incidentAddress = in.readString();
+        city = in.readString();
+        borough = in.readString();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Method that writes the report's data to a Parcel
+     * @param dest the parcel to write to
+     * @param flags
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(dateCreated);
+        dest.writeString(locationType);
+        dest.writeDouble(incidentZip);
+        dest.writeString(incidentAddress);
+        dest.writeString(city);
+        dest.writeString(borough);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
+    }
+
+    /**
+     * Creator class defined for Parcelable implementation that generates instances of RatReport from passed in Parcels
+     */
+    public static final Parcelable.Creator<RatReport> CREATOR
+            = new Parcelable.Creator<RatReport>() {
+        public RatReport createFromParcel(Parcel in) {
+            return new RatReport(in);
+        }
+
+        public RatReport[] newArray(int size) {
+            return new RatReport[size];
+        }
+    };
 }
