@@ -32,5 +32,8 @@
     <string name="rat_report_text">View Rat Reports</string>
     <string name="title_activity_report_details">ReportDetailsActivity</string>
 
+    <!-- Report Details Strings -->
+    <string name="report_details">Report Details</string>
+
 
 </resources>
