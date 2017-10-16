@@ -28,8 +28,9 @@
         <activity
             android:name=".controller.ReportDetailsActivity"
             android:label="@string/title_activity_report_details"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".controller.ReportListActivity"/>
+            android:parentActivityName=".controller.ReportListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".controller.AddReport"></activity>
     </application>
 
 </manifest>
