@@ -1,14 +1,9 @@
 package edu.gatech.cs2340.rattracker.controller;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import edu.gatech.cs2340.rattracker.R;
 import edu.gatech.cs2340.rattracker.model.RatReport;
@@ -38,7 +33,7 @@ public class ReportDetailsActivity extends AppCompatActivity {
      */
     public void populateData(RatReport report) {
         TextView date = findViewById(R.id.dateCreated);
-        TextView address = findViewById(R.id.address);
+        TextView address = findViewById(R.id.zipcode);
         TextView borough = findViewById(R.id.borough);
         TextView locType = findViewById(R.id.locType);
         TextView lat = findViewById(R.id.lat);
