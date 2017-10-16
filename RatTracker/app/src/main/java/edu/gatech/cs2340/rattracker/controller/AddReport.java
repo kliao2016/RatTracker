@@ -3,13 +3,14 @@ package edu.gatech.cs2340.rattracker.controller;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.support.v4.app.DialogFragment;
-import android.icu.util.Calendar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+
+import java.util.Calendar;
 
 import edu.gatech.cs2340.rattracker.R;
 
@@ -21,11 +22,19 @@ public class AddReport extends AppCompatActivity {
         setContentView(R.layout.add_report);
 
         Button dateButton = findViewById(R.id.datebutton);
+        Button cancelButton = findViewById(R.id.cancelButton);
 
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }

@@ -14,58 +14,44 @@
         android:layout_marginStart="8dp"
         android:inputType="text"
         android:text="Zipcode"
-        android:layout_marginRight="59dp"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintHorizontal_bias="0.807"
-        android:layout_marginTop="115dp"
-        app:layout_constraintTop_toBottomOf="@+id/timebutton" />
+        tools:layout_editor_absoluteY="290dp"
+        app:layout_constraintLeft_toRightOf="@+id/address"
+        android:layout_marginLeft="48dp" />
 
     <Button
         android:id="@+id/datebutton"
-        android:layout_width="wrap_content"
+        android:layout_width="115dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="73dp"
         android:layout_marginTop="28dp"
         android:backgroundTint="@color/buttonGold"
         android:text="Select Date"
         android:textColor="@color/deepBlue"
-        app:layout_constraintTop_toBottomOf="@+id/addReportTitle"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.223" />
+        app:layout_constraintTop_toBottomOf="@+id/addReportTitle" />
 
     <EditText
         android:id="@+id/address"
         android:layout_width="154dp"
         android:layout_height="44dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="115dp"
         android:inputType="text"
         android:text="Address"
-        app:layout_constraintHorizontal_bias="0.168"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/datebutton" />
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/addressTitle"
+        tools:layout_editor_absoluteX="60dp" />
 
     <Button
         android:id="@+id/timebutton"
-        android:layout_width="wrap_content"
+        android:layout_width="115dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="28dp"
         android:backgroundTint="@color/buttonGold"
         android:text="Select Time"
         android:textColor="@color/deepBlue"
-        app:layout_constraintHorizontal_bias="0.343"
         app:layout_constraintLeft_toRightOf="@+id/datebutton"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addReportTitle" />
 
     <Spinner
@@ -163,29 +149,26 @@
 
     <Button
         android:id="@+id/addReportButton"
-        android:layout_width="wrap_content"
+        android:layout_width="115dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="62dp"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="21dp"
         android:backgroundTint="@color/buttonGold"
         android:text="Add Report"
         android:textColor="@color/deepBlue"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timebutton" />
+        app:layout_constraintTop_toBottomOf="@+id/boroughSpinner"
+        android:layout_marginLeft="73dp"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
         android:id="@+id/cancelButton"
-        android:layout_width="wrap_content"
+        android:layout_width="115dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="21dp"
         android:backgroundTint="@color/buttonGold"
         android:text="Cancel"
         android:textColor="@color/deepBlue"
-        app:layout_constraintHorizontal_bias="0.567"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/addReportButton"
-        app:layout_constraintTop_toBottomOf="@+id/datebutton" />
+        app:layout_constraintTop_toBottomOf="@+id/boroughSpinner"
+        app:layout_constraintLeft_toRightOf="@+id/addReportButton"
+        android:layout_marginLeft="8dp" />
 
 </android.support.constraint.ConstraintLayout>
