@@ -57,7 +57,15 @@ public class AddReport extends AppCompatActivity {
         setClickListeners();
     }
 
-    private void addNewReport() {
+    /**
+     * Method that creates a new RatReport using the user's inputted data and then adds to the database
+     * Calls validateInput() to validate the data before creating a report
+     * @return whether the report was successfully added
+     */
+    private boolean addNewReport() {
+        if (!validateInput()) {
+            return false;
+        }
         String dateCreated = dateText.getText().toString() + " " + timeText.getText().toString();
         String locationType = locTypes.getSelectedItem().toString();
         double incidentZip = Double.parseDouble(zipText.getText().toString());
@@ -73,20 +81,32 @@ public class AddReport extends AppCompatActivity {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("reports");
         ref = ref.push();
         ref.setValue(newReport);
+        return true;
     }
 
+    /**
+     * Displays the DatePickerFragment
+     * @param v the current view
+     */
     public void showDatePickerDialog(View v) {
         FragmentManager fm = getSupportFragmentManager();
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(fm, "datePicker");
     }
 
+    /**
+     * Displays the TimePickerFragment
+     * @param v the current view
+     */
     public void showTimePickerDialog(View v) {
         FragmentManager fm = getSupportFragmentManager();
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(fm, "timePicker");
     }
 
+    /**
+     * Defines a fragment that is shown when choosing the date that displays a calendar to the user
+     */
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -100,11 +120,22 @@ public class AddReport extends AppCompatActivity {
             return new DatePickerDialog(getActivity(), this, year, month, day);
         }
 
+        /**
+         * Method that is called upon closure of the DatePickerFragment
+         * Sets the dateText field to a string in the format "MM/DD/YYYY"
+         * @param view the current view
+         * @param year the entered year
+         * @param month the entered month
+         * @param day the entered day
+         */
         public void onDateSet(DatePicker view, int year, int month, int day) {
             dateText.setText((month + 1) + "/" + day + "/" + year);
         }
     }
 
+    /**
+     * Defines a fragment that is shown when choosing the time that displays a clock to the user
+     */
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
 
@@ -120,6 +151,13 @@ public class AddReport extends AppCompatActivity {
                     DateFormat.is24HourFormat(getActivity()));
         }
 
+        /**
+         * Method that is called upon closure of the TimePickerFragment
+         * Converts the hour to 12 hr format and sets the timeText field to a string in the format "HH:MM:SS AM/PM"
+         * @param view the current view
+         * @param hourOfDay the hour entered in 24 hr format
+         * @param minute the minute entered
+         */
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             String minString = "" + minute;
             if (minute < 10) {
@@ -229,9 +267,8 @@ public class AddReport extends AppCompatActivity {
         addReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateInput()) {
-                    addNewReport();
-                    Toast.makeText(AddReport.this, "Successfully added", Toast.LENGTH_SHORT).show();
+                if (addNewReport()) {
+                    Toast.makeText(AddReport.this, "Report successfully added!", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
