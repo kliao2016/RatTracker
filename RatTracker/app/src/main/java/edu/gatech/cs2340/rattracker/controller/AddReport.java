@@ -17,6 +17,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Calendar;
 import edu.gatech.cs2340.rattracker.R;
 import edu.gatech.cs2340.rattracker.model.RatReport;
@@ -54,19 +58,21 @@ public class AddReport extends AppCompatActivity {
     }
 
     private void addNewReport() {
-        String dateCreated = dateText.getText().toString();
+        String dateCreated = dateText.getText().toString() + " " + timeText.getText().toString();
         String locationType = locTypes.getSelectedItem().toString();
         double incidentZip = Double.parseDouble(zipText.getText().toString());
-        String incidentAddress = addrText.getText().toString();
+        String incidentAddress = addrText.getText().toString().trim().toUpperCase();
         String city = "New York";
-        String borough = boroughs.getSelectedItem().toString();
+        String borough = boroughs.getSelectedItem().toString().toUpperCase();
         double latitude = 0;
         double longitude = 0; //TODO: use G Maps for Lat and Lng by using address + zip
 
         RatReport newReport = new RatReport(dateCreated, locationType, incidentZip, incidentAddress,
                                             city, borough, latitude, longitude);
 
-        Toast.makeText(this, newReport.toString(), Toast.LENGTH_LONG).show();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("reports");
+        ref = ref.push();
+        ref.setValue(newReport);
     }
 
     public void showDatePickerDialog(View v) {
@@ -119,7 +125,20 @@ public class AddReport extends AppCompatActivity {
             if (minute < 10) {
                 minString = "0" + minString;
             }
-            timeText.setText(hourOfDay + ":" + minString + ":" + "00");
+            String am_pm = "";
+            if (hourOfDay < 12) {
+                am_pm = "AM";
+                if (hourOfDay == 0) {
+                    hourOfDay = 12;
+                }
+
+            } else {
+                am_pm = "PM";
+                if(hourOfDay != 12) {
+                    hourOfDay -= 12;
+                }
+            }
+            timeText.setText(hourOfDay + ":" + minString + ":" + "00" + " " + am_pm);
         }
     }
 
