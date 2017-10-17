@@ -12,5 +12,19 @@
         android:background="@drawable/recycler_view_border"
         android:padding="55dp"
         app:layoutManager="android.support.v7.widget.GridLayoutManager"
-        tools:listitem="@layout/report_list_content" />
+        tools:listitem="@layout/report_list_content" >
+
+    </android.support.v7.widget.RecyclerView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/report_list_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:clickable="true"
+        app:backgroundTint="@color/buttonGold"
+        app:elevation="10dp"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/icons8_add_48" />
+
 </android.support.design.widget.CoordinatorLayout>
