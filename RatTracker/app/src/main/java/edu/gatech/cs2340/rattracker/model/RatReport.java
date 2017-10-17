@@ -114,6 +114,14 @@ public class RatReport implements Parcelable {
         this.longitude = longitude;
     }
 
+    //toString
+    @Override
+    public String toString() {
+        return "Rat Report: " + dateCreated + " at " + incidentAddress + ", "
+                + borough + ", " + city + " " + (int) incidentZip + ". " + locationType + ". "
+                + "Latitude: " + latitude + " Longitude: " + longitude;
+    }
+
     /**
      * Constructor used by Parcel to make a RatReport out of the parceled information
      * @param in the parcel containing the report information

@@ -26,9 +26,11 @@ import com.google.firebase.database.Query;
 
 public class ReportListActivity extends AppCompatActivity {
 
+    private static final int numQueries = 25;
+
     Query query = FirebaseDatabase.getInstance().getReference()
             .child("reports")
-            .limitToLast(25);
+            .limitToLast(numQueries);
 
     FirebaseRecyclerOptions<RatReport> options =
             new FirebaseRecyclerOptions.Builder<RatReport>()

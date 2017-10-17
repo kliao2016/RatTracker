@@ -35,5 +35,45 @@
     <!-- Report Details Strings -->
     <string name="report_details">Report Details</string>
 
+    <!-- Add Report Strings -->
+    <string name="select_date">Enter Date</string>
+    <string name="select_time">Enter Time</string>
+    <string name="select_location_type">Select Location Type</string>
+    <string name="input_address">Input Address</string>
+    <string name="address">Address</string>
+    <string name="zipcode">Zipcode</string>
+    <string name="select_borough">Select Borough</string>
+    <string name="add_report">Add Report</string>
+    <string name="cancel">Cancel</string>
+
+    <string-array name="boroughs">
+        <item>Manhattan</item>
+        <item>Bronx</item>
+        <item>Brooklyn</item>
+        <item>Queens</item>
+        <item>Staten Island</item>
+    </string-array>
+
+    <string-array name="locTypes">
+        <item>Vacant Lot</item>
+        <item>Vacant Building</item>
+        <item>Commercial Building</item>
+        <item>Office Building</item>
+        <item>School/Pre-School</item>
+        <item>Day Care/Nursery</item>
+        <item>Public Stairs</item>
+        <item>Hospital</item>
+        <item>Construction Site</item>
+        <item>Parking Lot/Garage</item>
+        <item>Catch Basin/Sewer</item>
+        <item>Public Garden</item>
+        <item>Government Building</item>
+        <item>1&#8211;2 Family Dwelling</item>
+        <item>3+ Family Apt. Building</item>
+        <item>3+ Family Mixed Use Building</item>
+        <item>Single Room Occupancy (SRO)</item>
+        <item>Other</item>
+    </string-array>
+
 
 </resources>

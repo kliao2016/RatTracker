@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button logoutButton;
     private Button ratReportButton;
+    private Button addReportButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         logoutButton = (Button) findViewById(R.id.logoutButton);
         ratReportButton = (Button) findViewById(R.id.ratReportButton);
+        addReportButton = findViewById(R.id.addReportButton);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,6 +41,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 goToReports();
+            }
+        });
+
+        addReportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToAdd();
             }
         });
 
@@ -62,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
      */
     public void goToReports() {
         Intent intent = new Intent(this, ReportListActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToAdd() {
+        Intent intent = new Intent(this, AddReport.class);
         startActivity(intent);
     }
 }
