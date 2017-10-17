@@ -22,24 +22,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center">
-        <Button
-            android:id="@+id/datebutton"
-            android:layout_width="115dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/buttonGold"
-            android:text="@string/select_date"
-            android:textColor="@color/deepBlue"
-            android:layout_marginTop="8dp"/>
 
-        <Button
-            android:id="@+id/timebutton"
+        <EditText
+            android:id="@+id/date"
             android:layout_width="115dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/buttonGold"
-            android:text="@string/select_time"
-            android:textColor="@color/deepBlue"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"/>
+            android:layout_height="44dp"
+            android:inputType="none"
+            android:focusable="false"
+            android:hint="@string/select_date"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/time"
+            android:layout_width="115dp"
+            android:layout_height="44dp"
+            android:inputType="none"
+            android:focusable="false"
+            android:hint="@string/select_time"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp" />
     </LinearLayout>
 
     <TextView
