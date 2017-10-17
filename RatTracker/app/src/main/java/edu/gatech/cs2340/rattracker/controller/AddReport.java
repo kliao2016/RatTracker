@@ -19,6 +19,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import java.util.Calendar;
 import edu.gatech.cs2340.rattracker.R;
+import edu.gatech.cs2340.rattracker.model.RatReport;
 
 /**
  * Brian Glowniak 10/16/17
@@ -50,6 +51,22 @@ public class AddReport extends AppCompatActivity {
 
         populateSpinners();
         setClickListeners();
+    }
+
+    private void addNewReport() {
+        String dateCreated = dateText.getText().toString();
+        String locationType = locTypes.getSelectedItem().toString();
+        double incidentZip = Double.parseDouble(zipText.getText().toString());
+        String incidentAddress = addrText.getText().toString();
+        String city = "New York";
+        String borough = boroughs.getSelectedItem().toString();
+        double latitude = 0;
+        double longitude = 0; //TODO: use G Maps for Lat and Lng by using address + zip
+
+        RatReport newReport = new RatReport(dateCreated, locationType, incidentZip, incidentAddress,
+                                            city, borough, latitude, longitude);
+
+        Toast.makeText(this, newReport.toString(), Toast.LENGTH_LONG).show();
     }
 
     public void showDatePickerDialog(View v) {
@@ -120,20 +137,18 @@ public class AddReport extends AppCompatActivity {
         //validate time
         boolean timeV = timeText.getText().toString().length() != 0;
 
-        //validate address
-        boolean addressV = true;
+        //validate address (TODO: use Google Maps API to ensure that it is a valid address)
+        boolean addressV = addrText.getText().toString().length() != 0;
 
         //validate zip
-        boolean zipV = true;
+        boolean zipV;
         String zip = zipText.getText().toString();
-        int zipNum = 0;
         try {
-            zipNum = Integer.parseInt(zip);
+            int zipNum = Integer.parseInt(zip);
+            zipV = zip.length() == 5 && zipNum > 0 && zipNum <= 99999;
         } catch (NumberFormatException e) {
             zipV = false;
         }
-
-        zipV = zip.length() == 5 && zipNum > 0 && zipNum <= 99999;
 
         if (!dateV) {
             toastMessage = "Invalid input: you must enter a date";
@@ -196,7 +211,9 @@ public class AddReport extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (validateInput()) {
-                    Toast.makeText(AddReport.this, "Success", Toast.LENGTH_SHORT).show();
+                    addNewReport();
+                    Toast.makeText(AddReport.this, "Successfully added", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }
         });
