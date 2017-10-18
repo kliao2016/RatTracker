@@ -37,6 +37,10 @@
             android:label="@string/title_activity_report_details"
             android:parentActivityName=".controller.ReportListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".controller.RatMapActivity"
+            android:label="@string/title_activity_rat_map" />
+        <activity android:name=".controller.AddReport" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -49,11 +53,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".controller.RatMapActivity"
-            android:label="@string/title_activity_rat_map">
-        </activity>
-        <activity android:name=".controller.AddReport"></activity>
     </application>
 
 </manifest>
