@@ -50,7 +50,7 @@
             android:textSize="17sp" />
 
         <TextView
-            android:id="@+id/address"
+            android:id="@+id/zipcode"
             android:layout_width="match_parent"
             android:layout_height="16dp"
             android:layout_marginTop="5sp"

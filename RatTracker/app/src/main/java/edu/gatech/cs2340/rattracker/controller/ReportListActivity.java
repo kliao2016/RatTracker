@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -26,9 +28,11 @@ import com.google.firebase.database.Query;
 
 public class ReportListActivity extends AppCompatActivity {
 
+    private static final int numQueries = 25;
+
     Query query = FirebaseDatabase.getInstance().getReference()
             .child("reports")
-            .limitToLast(25);
+            .limitToLast(numQueries);
 
     FirebaseRecyclerOptions<RatReport> options =
             new FirebaseRecyclerOptions.Builder<RatReport>()
@@ -38,6 +42,15 @@ public class ReportListActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_list);
+
+        FloatingActionButton reportListFab = (FloatingActionButton) findViewById(R.id.report_list_fab);
+        reportListFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent addReportIntent = new Intent(ReportListActivity.this, AddReport.class);
+                startActivity(addReportIntent);
+            }
+        });
 
         this.getWindow().setTitle("Reports");
 

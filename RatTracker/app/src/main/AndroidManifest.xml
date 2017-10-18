@@ -51,7 +51,9 @@
 
         <activity
             android:name=".controller.RatMapActivity"
-            android:label="@string/title_activity_rat_map"></activity>
+            android:label="@string/title_activity_rat_map">
+        </activity>
+        <activity android:name=".controller.AddReport"></activity>
     </application>
 
 </manifest>

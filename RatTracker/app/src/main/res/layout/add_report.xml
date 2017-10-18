@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/recycler_view_border"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/addReportTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_report"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/date"
+            android:layout_width="115dp"
+            android:layout_height="44dp"
+            android:inputType="none"
+            android:focusable="false"
+            android:hint="@string/select_date"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/time"
+            android:layout_width="115dp"
+            android:layout_height="44dp"
+            android:inputType="none"
+            android:focusable="false"
+            android:hint="@string/select_time"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/locationTypeTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_location_type"
+        android:textAlignment="center"
+        android:textColor="@color/deepBlue"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" />
+
+    <Spinner
+        android:id="@+id/locationType"
+        android:layout_width="246dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/addressTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/input_address"
+        android:textAlignment="center"
+        android:textColor="@color/deepBlue"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <EditText
+            android:id="@+id/address"
+            android:layout_width="154dp"
+            android:layout_height="44dp"
+            android:inputType="text"
+            android:hint="@string/address"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/zipcode"
+            android:layout_width="83dp"
+            android:layout_height="44dp"
+            android:inputType="text"
+            android:hint="@string/zipcode"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="9dp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/boroughTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_borough"
+        android:textAlignment="center"
+        android:textColor="@color/deepBlue"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" />
+
+    <Spinner
+        android:id="@+id/boroughSpinner"
+        android:layout_width="246dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/addReportButton"
+            android:layout_width="115dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/buttonGold"
+            android:text="@string/add_report"
+            android:textColor="@color/deepBlue"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="115dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/buttonGold"
+            android:text="@string/cancel"
+            android:textColor="@color/deepBlue"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp" />
+    </LinearLayout>
+
+</LinearLayout>
