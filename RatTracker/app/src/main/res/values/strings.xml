@@ -34,6 +34,7 @@
 
     <!-- Report Details Strings -->
     <string name="report_details">Report Details</string>
+    <string name="title_activity_rat_map">Locate a Rat</string>
 
     <!-- Add Report Strings -->
     <string name="select_date">Enter Date</string>
