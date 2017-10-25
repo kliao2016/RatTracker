@@ -47,6 +47,11 @@
     <string name="add_report">Add Report</string>
     <string name="cancel">Cancel</string>
 
+    <!-- Map Strings -->
+    <string name="date_range_title">Select Date Range</string>
+    <string name="date_range_info">To view rat sightings from just a single day, select the same date for both of the above boxes.</string>
+    <string name="select_date_range">View sightings from this date range</string>
+
     <string-array name="boroughs">
         <item>Manhattan</item>
         <item>Bronx</item>
