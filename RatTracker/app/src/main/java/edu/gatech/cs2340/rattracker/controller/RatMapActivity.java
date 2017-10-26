@@ -3,6 +3,7 @@ package edu.gatech.cs2340.rattracker.controller;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -32,7 +33,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -171,8 +174,15 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
 
         // Load reports from reportMap
         if (!isEmpty(startDateText) && !isEmpty(endDateText)) {
-            String startDate = startDateText.getText().toString().trim();
-            String endDate = endDateText.getText().toString().trim();
+            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+            Date startDate = new Date();
+            Date endDate = new Date();
+            try {
+                startDate = formatter.parse(startDateText.getText().toString().trim());
+                endDate = formatter.parse(endDateText.getText().toString().trim());
+            } catch (ParseException e) {
+                Log.d("Date Parse Exception", e.getMessage());
+            }
             if (startDate.compareTo(endDate) > 0) {
                 generateDateRangeAlert(R.string.valid_range_title,
                         R.string.valid_range_info);
@@ -184,8 +194,14 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
                         String dateCreated = ratReportEntry.getValue().getDateCreated();
                         String dateTrimmed = dateCreated.substring(0,
                                 dateCreated.indexOf(' '));
-                        if (dateTrimmed.compareTo(startDate) >= 0
-                                && dateTrimmed.compareTo(endDate) <= 0) {
+                        Date ratEntryDate = new Date();
+                        try {
+                            ratEntryDate = formatter.parse(dateTrimmed);
+                        } catch (ParseException e) {
+                            Log.d("Date Parse Exception", e.getMessage());
+                        }
+                        if (ratEntryDate.compareTo(startDate) >= 0
+                                && ratEntryDate.compareTo(endDate) <= 0) {
                             MarkerOptions newReportOptions = new MarkerOptions()
                                     .title("Sighting " + ratReportEntry.getKey())
                                     .position(new LatLng(ratReportEntry.getValue().getLatitude(),
