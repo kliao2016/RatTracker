@@ -170,6 +170,11 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
 
     }
 
+    /**
+     * Method to load rat sightings from database and display them on map
+     *
+     * @param googleMap the map to be displayed
+     */
     private void loadSightings(GoogleMap googleMap) {
         mMap = googleMap;
 
@@ -284,6 +289,9 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
         }
     }
 
+    /**
+     * Inner class that is an async task that loads rat sighting data before being displayed
+     */
     private class LoadSightingsTask extends AsyncTask<Void, Void, Map<String, RatReport>> {
         private ProgressBar progress;
         private Map<String, RatReport> asyncMap = new HashMap<>();
@@ -291,7 +299,7 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
         private Query databaseRef = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("reports")
-                .limitToLast(150);
+                .limitToLast(300);
 
         @Override
         protected void onPreExecute() {
