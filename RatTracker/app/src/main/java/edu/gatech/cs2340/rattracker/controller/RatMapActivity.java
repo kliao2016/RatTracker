@@ -2,12 +2,15 @@ package edu.gatech.cs2340.rattracker.controller;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,7 +23,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,24 +41,27 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
     private GoogleMap mMap;
     private static EditText startDateText;
     private static EditText endDateText;
-    private static Query databaseRef;
+    private Button selectRangeButton;
+    private Query databaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rat_map);
-        databaseRef = FirebaseDatabase.getInstance().getReference().child("reports").limitToFirst(25);
+        databaseRef = FirebaseDatabase.getInstance().getReference().child("reports").limitToLast(50);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.rat_map_fragment);
         mapFragment.getMapAsync(this);
 
+        selectRangeButton = findViewById(R.id.select_date_button);
         startDateText = findViewById(R.id.start_date_text);
         endDateText = findViewById(R.id.end_date_text);
 
         if (googleServicesAvailable()) {
             Toast.makeText(this, "Connection to Google Maps Services successful", Toast.LENGTH_SHORT).show();
         }
+
         setClickListeners();
     }
 
@@ -94,28 +99,28 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
         CameraUpdate zoomCamera = CameraUpdateFactory.newLatLngZoom(ny, 8);
         mMap.moveCamera(zoomCamera);
 
-        // Load reports from Firebase and drop pins
-        RatMapActivity.databaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ratSnapshot: dataSnapshot.getChildren()) {
-                    RatReport ratReport = ratSnapshot.getValue(RatReport.class);
-                    if (ratReport != null) {
-                        MarkerOptions newReportOptions = new MarkerOptions()
-                                .title("Sighting " + ratSnapshot.getKey())
-                                .position(new LatLng(ratReport.getLatitude(),
-                                        ratReport.getLongitude()))
-                                .snippet("Sighted: " + ratReport.getDateCreated());
-                        mMap.addMarker(newReportOptions);
-                    }
-                }
-            }
+        loadSightings(mMap);
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+    /**
+     * Method to create custom alert dialog popup
+     *
+     * @param title the title of the alert
+     * @param message the message of the alert
+     */
+    private void generateDateRangeAlert(int title, int message) {
+        AlertDialog.Builder loginAlertBuilder = new AlertDialog.Builder(this);
+        loginAlertBuilder.setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(R.string.popup_button_okay,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int id) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+        AlertDialog loginAlert = loginAlertBuilder.create();
+        loginAlert.show();
     }
 
     /**
@@ -135,6 +140,14 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
      * Method that sets the click listeners for the buttons of the activity
      */
     private void setClickListeners() {
+        selectRangeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mMap.clear();
+                loadSightings(mMap);
+            }
+        });
+
         startDateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,6 +162,72 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
             }
         });
 
+    }
+
+    private void loadSightings(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Load reports from Firebase and drop pins
+        databaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!isEmpty(startDateText) && !isEmpty(endDateText)) {
+                    String startDate = startDateText.getText().toString().trim();
+                    String endDate = endDateText.getText().toString().trim();
+                    if (startDate.compareTo(endDate) > 0) {
+                        generateDateRangeAlert(R.string.valid_range_title,
+                                R.string.valid_range_info);
+                        startDateText.setText("");
+                        endDateText.setText("");
+                    } else {
+                        for (DataSnapshot ratSnapshot: dataSnapshot.getChildren()) {
+                            RatReport ratReport = ratSnapshot.getValue(RatReport.class);
+                            if (ratReport != null) {
+                                String dateCreated = ratReport.getDateCreated();
+                                String dateTrimmed = dateCreated.substring(0,
+                                        dateCreated.indexOf(' '));
+                                if (dateTrimmed.compareTo(startDate) >= 0
+                                        && dateTrimmed.compareTo(endDate) <= 0) {
+                                    MarkerOptions newReportOptions = new MarkerOptions()
+                                            .title("Sighting " + ratSnapshot.getKey())
+                                            .position(new LatLng(ratReport.getLatitude(),
+                                                    ratReport.getLongitude()))
+                                            .snippet("Sighted: " + ratReport.getDateCreated());
+                                    mMap.addMarker(newReportOptions);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    for (DataSnapshot ratSnapshot: dataSnapshot.getChildren()) {
+                        RatReport ratReport = ratSnapshot.getValue(RatReport.class);
+                        if (ratReport != null) {
+                            MarkerOptions newReportOptions = new MarkerOptions()
+                                    .title("Sighting " + ratSnapshot.getKey())
+                                    .position(new LatLng(ratReport.getLatitude(),
+                                            ratReport.getLongitude()))
+                                    .snippet("Sighted: " + ratReport.getDateCreated());
+                            mMap.addMarker(newReportOptions);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    /**
+     * Method to check if an EditText field is empty
+     *
+     * @param editText the EditText field to check
+     * @return true if the EditText field is empty and false otherwise
+     */
+    private boolean isEmpty(EditText editText) {
+        return editText.getText().toString().trim().length() == 0;
     }
 
     /**

@@ -51,6 +51,8 @@
     <string name="date_range_title">Select Date Range</string>
     <string name="date_range_info">To view rat sightings from just a single day, select the same date for both of the above boxes.</string>
     <string name="select_date_range">View sightings from this date range</string>
+    <string name="valid_range_title">Invalid start date</string>
+    <string name="valid_range_info">The start date cannot be after the end date.</string>
 
     <string-array name="boroughs">
         <item>Manhattan</item>
