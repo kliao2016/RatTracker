@@ -3,6 +3,7 @@ package edu.gatech.cs2340.rattracker.controller;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -26,12 +28,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.gatech.cs2340.rattracker.R;
 import edu.gatech.cs2340.rattracker.model.RatReport;
@@ -42,21 +45,24 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
     private static EditText startDateText;
     private static EditText endDateText;
     private Button selectRangeButton;
-    private Query databaseRef;
+    private static Map<String, RatReport> reportMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rat_map);
-        databaseRef = FirebaseDatabase.getInstance().getReference().child("reports").limitToFirst(50);
+
+        LoadSightingsTask task = new LoadSightingsTask();
+        task.execute();
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.rat_map_fragment);
         mapFragment.getMapAsync(this);
 
-        selectRangeButton = findViewById(R.id.select_date_button);
         startDateText = findViewById(R.id.start_date_text);
         endDateText = findViewById(R.id.end_date_text);
+        selectRangeButton = findViewById(R.id.select_date_button);
 
         if (googleServicesAvailable()) {
             Toast.makeText(this, "Connection to Google Maps Services successful", Toast.LENGTH_SHORT).show();
@@ -167,57 +173,45 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
     private void loadSightings(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Load reports from Firebase and drop pins
-        databaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!isEmpty(startDateText) && !isEmpty(endDateText)) {
-                    String startDate = startDateText.getText().toString().trim();
-                    String endDate = endDateText.getText().toString().trim();
-                    if (startDate.compareTo(endDate) > 0) {
-                        generateDateRangeAlert(R.string.valid_range_title,
-                                R.string.valid_range_info);
-                        startDateText.setText("");
-                        endDateText.setText("");
-                    } else {
-                        for (DataSnapshot ratSnapshot: dataSnapshot.getChildren()) {
-                            RatReport ratReport = ratSnapshot.getValue(RatReport.class);
-                            if (ratReport != null) {
-                                String dateCreated = ratReport.getDateCreated();
-                                String dateTrimmed = dateCreated.substring(0,
-                                        dateCreated.indexOf(' '));
-                                if (dateTrimmed.compareTo(startDate) >= 0
-                                        && dateTrimmed.compareTo(endDate) <= 0) {
-                                    MarkerOptions newReportOptions = new MarkerOptions()
-                                            .title("Sighting " + ratSnapshot.getKey())
-                                            .position(new LatLng(ratReport.getLatitude(),
-                                                    ratReport.getLongitude()))
-                                            .snippet("Sighted: " + ratReport.getDateCreated());
-                                    mMap.addMarker(newReportOptions);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    for (DataSnapshot ratSnapshot: dataSnapshot.getChildren()) {
-                        RatReport ratReport = ratSnapshot.getValue(RatReport.class);
-                        if (ratReport != null) {
+        // Load reports from reportMap
+        if (!isEmpty(startDateText) && !isEmpty(endDateText)) {
+            String startDate = startDateText.getText().toString().trim();
+            String endDate = endDateText.getText().toString().trim();
+            if (startDate.compareTo(endDate) > 0) {
+                generateDateRangeAlert(R.string.valid_range_title,
+                        R.string.valid_range_info);
+                startDateText.setText("");
+                endDateText.setText("");
+            } else {
+                for (Map.Entry<String, RatReport> ratReportEntry: reportMap.entrySet()) {
+                    if (ratReportEntry != null) {
+                        String dateCreated = ratReportEntry.getValue().getDateCreated();
+                        String dateTrimmed = dateCreated.substring(0,
+                                dateCreated.indexOf(' '));
+                        if (dateTrimmed.compareTo(startDate) >= 0
+                                && dateTrimmed.compareTo(endDate) <= 0) {
                             MarkerOptions newReportOptions = new MarkerOptions()
-                                    .title("Sighting " + ratSnapshot.getKey())
-                                    .position(new LatLng(ratReport.getLatitude(),
-                                            ratReport.getLongitude()))
-                                    .snippet("Sighted: " + ratReport.getDateCreated());
+                                    .title("Sighting " + ratReportEntry.getKey())
+                                    .position(new LatLng(ratReportEntry.getValue().getLatitude(),
+                                            ratReportEntry.getValue().getLongitude()))
+                                    .snippet("Sighted: " + ratReportEntry.getValue()
+                                            .getDateCreated());
                             mMap.addMarker(newReportOptions);
                         }
                     }
                 }
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+        } else {
+            for (Map.Entry<String, RatReport> ratReportEntry: reportMap.entrySet()) {
+                MarkerOptions newReportOptions = new MarkerOptions()
+                        .title("Sighting " + ratReportEntry.getKey())
+                        .position(new LatLng(ratReportEntry.getValue().getLatitude(),
+                                ratReportEntry.getValue().getLongitude()))
+                        .snippet("Sighted: " + ratReportEntry.getValue()
+                                .getDateCreated());
+                mMap.addMarker(newReportOptions);
             }
-        });
+        }
     }
 
     /**
@@ -266,6 +260,49 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
             } else {
                 endDateText.setText((month + 1) + "/" + day + "/" + year);
             }
+        }
+    }
+
+    private class LoadSightingsTask extends AsyncTask<Void, Void, Map<String, RatReport>> {
+        private ProgressBar progress;
+        private Map<String, RatReport> asyncMap = new HashMap<>();
+
+        private Query databaseRef = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("reports")
+                .limitToLast(150);
+
+        @Override
+        protected void onPreExecute() {
+            progress = (ProgressBar) findViewById(R.id.rat_map_progress_bar);
+            progress.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Map<String, RatReport> doInBackground(Void... voids) {
+            databaseRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot ratSnapshot: dataSnapshot.getChildren()) {
+                        RatReport ratReport = ratSnapshot.getValue(RatReport.class);
+                        if (ratReport != null) {
+                            asyncMap.put(ratSnapshot.getKey(), ratReport);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+            return asyncMap;
+        }
+
+        @Override
+        protected void onPostExecute(Map<String, RatReport> ratReports) {
+            RatMapActivity.reportMap = ratReports;
+            progress.setVisibility(View.GONE);
         }
     }
 
