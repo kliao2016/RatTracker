@@ -3,6 +3,8 @@ package edu.gatech.cs2340.rattracker.controller;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
 import android.support.v4.app.DialogFragment;
@@ -50,7 +52,6 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
     private Button selectRangeButton;
     private static Map<String, RatReport> reportMap = new HashMap<>();
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rat_map);
@@ -250,8 +251,16 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
 
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    getActivity(),
+                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                    this,
+                    year, month, day);
+            datePickerDialog.getWindow().setBackgroundDrawable(
+                    new ColorDrawable(Color.TRANSPARENT));
+
             // Create a new instance of DatePickerDialog and return it
-            return new DatePickerDialog(getActivity(), this, year, month, day);
+            return datePickerDialog;
         }
 
         public void setStart(boolean start) {
