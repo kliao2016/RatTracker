@@ -48,7 +48,7 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rat_map);
-        databaseRef = FirebaseDatabase.getInstance().getReference().child("reports").limitToLast(50);
+        databaseRef = FirebaseDatabase.getInstance().getReference().child("reports").limitToFirst(50);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.rat_map_fragment);
