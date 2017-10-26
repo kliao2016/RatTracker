@@ -103,8 +103,8 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
         task.execute();
 
         // Center maps on geographic center of USA
-        LatLng ny = new LatLng(41, -74);
-        CameraUpdate zoomCamera = CameraUpdateFactory.newLatLngZoom(ny, 8);
+        LatLng ny = new LatLng(40.713, -74.01);
+        CameraUpdate zoomCamera = CameraUpdateFactory.newLatLngZoom(ny, 10);
         mMap.moveCamera(zoomCamera);
     }
 
