@@ -52,9 +52,6 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rat_map);
 
-        LoadSightingsTask task = new LoadSightingsTask();
-        task.execute();
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.rat_map_fragment);
@@ -98,14 +95,13 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        Log.d("Date Test: ", startDateText.getText().toString().trim());
+        LoadSightingsTask task = new LoadSightingsTask();
+        task.execute();
 
         // Center maps on geographic center of USA
         LatLng ny = new LatLng(41, -74);
         CameraUpdate zoomCamera = CameraUpdateFactory.newLatLngZoom(ny, 8);
         mMap.moveCamera(zoomCamera);
-
-        loadSightings(mMap);
     }
 
     /**
