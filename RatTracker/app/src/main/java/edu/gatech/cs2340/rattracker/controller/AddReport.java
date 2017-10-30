@@ -8,7 +8,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -24,8 +23,6 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -43,7 +40,6 @@ public class AddReport extends AppCompatActivity {
     private static EditText dateText;
     private static EditText timeText;
     private EditText addrText;
-    private EditText zipText;
     private Button cancelButton;
     private Button addReportButton;
     private final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -57,7 +53,6 @@ public class AddReport extends AppCompatActivity {
         dateText = findViewById(R.id.date);
         timeText = findViewById(R.id.time);
         addrText = findViewById(R.id.address);
-        //zipText = findViewById(R.id.zipcode);
         cancelButton = findViewById(R.id.cancelButton);
         addReportButton = findViewById(R.id.addReportButton);
         boroughs = findViewById(R.id.boroughSpinner);
@@ -79,15 +74,20 @@ public class AddReport extends AppCompatActivity {
         String dateCreated = dateText.getText().toString() + " " + timeText.getText().toString();
         String locationType = locTypes.getSelectedItem().toString();
 
-        String incidentAddress = place.getAddress().toString();
         //extract address
-        //String[] address = incidentAddress.split(",");
+        //this extraction makes certain assumptions about the input (namely, that it is a US addr)
+        String[] tokenizedAddr = place.getAddress().toString().split(",");
 
-        Toast.makeText(this, "" + incidentAddress, Toast.LENGTH_LONG).show();
-        double incidentZip = 0;//Double.parseDouble(zipText.getText().toString());
-        //String incidentAddress = addrText.getText().toString().trim().toUpperCase();
+        //due to the way the autocomplete works, the address we want will always be before the first comma
+        String incidentAddress = tokenizedAddr[0].toUpperCase();
+        String city = tokenizedAddr[1].trim();
+        double incidentZip = 0;
+        try {
+            incidentZip = Double.parseDouble(tokenizedAddr[2].substring(4).trim());
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Inputted address may not have a zip code. Defaulted to 0", Toast.LENGTH_SHORT).show();
+        }
 
-        String city = "New York";
         String borough = boroughs.getSelectedItem().toString().toUpperCase();
         double latitude = place.getLatLng().latitude;
         double longitude = place.getLatLng().longitude;
@@ -95,9 +95,9 @@ public class AddReport extends AppCompatActivity {
         RatReport newReport = new RatReport(dateCreated, locationType, incidentZip, incidentAddress,
                                             city, borough, latitude, longitude);
 
-        //DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("reports");
-        //ref = ref.push();
-        //ref.setValue(newReport);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("reports");
+        ref = ref.push();
+        ref.setValue(newReport);
         return true;
     }
 
