@@ -3,6 +3,7 @@ package edu.gatech.cs2340.rattracker.controller;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,13 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -38,6 +46,8 @@ public class AddReport extends AppCompatActivity {
     private EditText zipText;
     private Button cancelButton;
     private Button addReportButton;
+    private final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    private Place place;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +57,7 @@ public class AddReport extends AppCompatActivity {
         dateText = findViewById(R.id.date);
         timeText = findViewById(R.id.time);
         addrText = findViewById(R.id.address);
-        zipText = findViewById(R.id.zipcode);
+        //zipText = findViewById(R.id.zipcode);
         cancelButton = findViewById(R.id.cancelButton);
         addReportButton = findViewById(R.id.addReportButton);
         boroughs = findViewById(R.id.boroughSpinner);
@@ -68,19 +78,26 @@ public class AddReport extends AppCompatActivity {
         }
         String dateCreated = dateText.getText().toString() + " " + timeText.getText().toString();
         String locationType = locTypes.getSelectedItem().toString();
-        double incidentZip = Double.parseDouble(zipText.getText().toString());
-        String incidentAddress = addrText.getText().toString().trim().toUpperCase();
+
+        String incidentAddress = place.getAddress().toString();
+        //extract address
+        //String[] address = incidentAddress.split(",");
+
+        Toast.makeText(this, "" + incidentAddress, Toast.LENGTH_LONG).show();
+        double incidentZip = 0;//Double.parseDouble(zipText.getText().toString());
+        //String incidentAddress = addrText.getText().toString().trim().toUpperCase();
+
         String city = "New York";
         String borough = boroughs.getSelectedItem().toString().toUpperCase();
-        double latitude = 0;
-        double longitude = 0; //TODO: use G Maps for Lat and Lng by using address + zip
+        double latitude = place.getLatLng().latitude;
+        double longitude = place.getLatLng().longitude;
 
         RatReport newReport = new RatReport(dateCreated, locationType, incidentZip, incidentAddress,
                                             city, borough, latitude, longitude);
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("reports");
-        ref = ref.push();
-        ref.setValue(newReport);
+        //DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("reports");
+        //ref = ref.push();
+        //ref.setValue(newReport);
         return true;
     }
 
@@ -182,44 +199,31 @@ public class AddReport extends AppCompatActivity {
 
     /**
      * Method that checks whether the inputted information for the report is valid.
-     * Only needs to check address, zip, date, and time due to the other inputs being controlled
+     * Only needs to check address, date, and time due to the other inputs being controlled
      * @return whether the input for the report is valid
      */
     private boolean validateInput() {
-        String toastMessage = "";
-
         //validate date
         boolean dateV = dateText.getText().toString().length() != 0;
 
         //validate time
         boolean timeV = timeText.getText().toString().length() != 0;
 
-        //validate address (TODO: use Google Maps API to ensure that it is a valid address)
+        //validate address. Since we use autocomplete, we just need to check that an addr was entered
         boolean addressV = addrText.getText().toString().length() != 0;
 
-        //validate zip
-        boolean zipV;
-        String zip = zipText.getText().toString();
-        try {
-            int zipNum = Integer.parseInt(zip);
-            zipV = zip.length() == 5 && zipNum > 0 && zipNum <= 99999;
-        } catch (NumberFormatException e) {
-            zipV = false;
-        }
-
+        String toastMessage = "";
         if (!dateV) {
-            toastMessage = "Invalid input: you must enter a date";
+            toastMessage = "you must enter a date";
         } else if(!timeV) {
-            toastMessage = "Invalid input: you must enter a time";
+            toastMessage = "you must enter a time";
         } else if(!addressV) {
-            toastMessage = "Invalid address input";
-        } else if (!zipV) {
-            toastMessage = "Invalid zipcode input";
+            toastMessage = "you must enter an address";
         }
 
-        boolean isValid = dateV && timeV && addressV && zipV;
+        boolean isValid = dateV && timeV && addressV;
         if (!isValid) {
-            Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Invalid input: " + toastMessage, Toast.LENGTH_SHORT).show();
         }
         return isValid;
     }
@@ -239,6 +243,33 @@ public class AddReport extends AppCompatActivity {
         locTypes.setAdapter(adapter2);
     }
 
+    private void generateAddressCompletion() {
+        try {
+            Intent intent =
+                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                            .build(this);
+            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+        } catch (GooglePlayServicesRepairableException e) {
+            Toast.makeText(this, "Error. Google Play Services are not up to date", Toast.LENGTH_SHORT).show();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            Toast.makeText(this, "Error. Google Play Services unavailable", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                place = PlaceAutocomplete.getPlace(this, data);
+                addrText.setText(place.getAddress());
+
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(this, data);
+                Toast.makeText(this, "Error. Please re-enter the address", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     /**
      * Method that sets the click listeners for the buttons of the activity
      */
@@ -254,6 +285,13 @@ public class AddReport extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showTimePickerDialog(v);
+            }
+        });
+
+        addrText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                generateAddressCompletion();
             }
         });
 
