@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.text.format.DateFormat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import edu.gatech.cs2340.rattracker.R;
 import edu.gatech.cs2340.rattracker.model.RatReport;
@@ -79,14 +81,16 @@ public class AddReport extends AppCompatActivity {
 
         //extract address
         //this extraction makes certain assumptions about the input (namely, that it is a US addr)
-        String[] tokenizedAddr = place.getAddress().toString().split(",");
+        String addr = place.getAddress().toString().trim();
+        String[] tokenizedAddr = addr.split(",");
 
         //due to the way the autocomplete works, the address we want will always be before the first comma
         String incidentAddress = tokenizedAddr[0].toUpperCase();
         String city = tokenizedAddr[1].trim();
         double incidentZip = 0;
         try {
-            incidentZip = Double.parseDouble(tokenizedAddr[2].substring(4).trim());
+            //end of address is zip, USA
+            incidentZip = Double.parseDouble(addr.substring(addr.length() - 10, addr.length() - 5).trim());
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Inputted address may not have a zip code. Defaulted to 0", Toast.LENGTH_SHORT).show();
         }
@@ -212,6 +216,11 @@ public class AddReport extends AppCompatActivity {
         //validate time
         boolean timeV = timeText.getText().toString().length() != 0;
 
+        /*SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
+        String date = df.format(Calendar.getInstance().getTime());
+        String inputDate = dateText.getText().toString();
+        boolean chronoV = true;*/
+
         //validate address. Since we use autocomplete, we just need to check that an addr was entered
         boolean addressV = addrText.getText().toString().length() != 0;
 
@@ -222,9 +231,11 @@ public class AddReport extends AppCompatActivity {
             toastMessage = "you must enter a time";
         } else if(!addressV) {
             toastMessage = "you must enter an address";
-        }
+        } /*else if(!chronoV) {
+            toastMessage = "date and/or time is after the current date/time";
+        }*/
 
-        boolean isValid = dateV && timeV && addressV;
+        boolean isValid = dateV && timeV && addressV; // && chronoV;
         if (!isValid) {
             Toast.makeText(this, "Invalid input: " + toastMessage, Toast.LENGTH_SHORT).show();
         }
