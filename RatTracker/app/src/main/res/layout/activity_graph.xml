@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorAccent"
+    tools:context="edu.gatech.cs2340.rattracker.controller.RatMapActivity">
+
+    <TextView
+        android:id="@+id/date_range_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
+        android:text="@string/date_range_title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    <ProgressBar
+        android:id="@+id/rat_map_progress_bar"
+        style="@android:style/Widget.ProgressBar.Small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:max="10"
+        android:padding="4dip" >
+    </ProgressBar>
+
+    <LinearLayout
+        android:id="@+id/date_range_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/graph_start_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="none"
+            android:focusable="false"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:ems="10"
+            android:hint="Start Date" />
+
+        <EditText
+            android:id="@+id/graph_end_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="none"
+            android:focusable="false"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:ems="10"
+            android:hint="End Date" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/grapg_date_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/buttonGold"
+        android:text="@string/select_date_range"
+        android:textColor="@color/deepBlue"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"/>
+
+    <fragment
+        android:id="@+id/rat_map_fragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+</LinearLayout>
