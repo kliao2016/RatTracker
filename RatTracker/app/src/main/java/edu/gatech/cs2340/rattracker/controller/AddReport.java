@@ -243,6 +243,10 @@ public class AddReport extends AppCompatActivity {
         locTypes.setAdapter(adapter2);
     }
 
+    /**
+     * Generates an overlaid intent that allows the user to enter an address
+     * Makes use of the Google Places API to autocomplete user input
+     */
     private void generateAddressCompletion() {
         try {
             Intent intent =
@@ -256,6 +260,13 @@ public class AddReport extends AppCompatActivity {
         }
     }
 
+    /**
+     * Callback function upon closing an activity opened for a result
+     * Used specifically for the PlaceAutocomplete intent to pass on the user entered data to the add report activity
+     * @param requestCode specifies what functionality was requested
+     * @param resultCode specifies the result of the activity
+     * @param data contains the data entered when the intent was open
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
