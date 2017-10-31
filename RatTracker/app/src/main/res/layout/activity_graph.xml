@@ -62,7 +62,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/grapg_date_button"
+        android:id="@+id/graph_date_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/buttonGold"
