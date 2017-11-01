@@ -20,6 +20,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -56,7 +58,7 @@ public class GraphActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
         chart = findViewById(R.id.chart);
-        chart.setNoDataText("You have to give me data first, dumbass!");
+        chart.setNoDataText("Have you considered selecting a date?");
         chart.setDrawBorders(true);
         chart.setBorderWidth(4);
 
@@ -144,24 +146,26 @@ public class GraphActivity extends AppCompatActivity {
                     if (currentMonthValue > 12) {
                         currentMonthValue = currentMonthValue % 12;
                         currentYearValue += 1;
+                        Log.d("GRAPH Incrementing", Integer.toString(currentYearValue));
                     }
                     String currentMonthString = Integer.toString(currentMonthValue);
                     String currentYearString = Integer.toString(currentYearValue);
-                    String currentDateString = currentMonthString + "/" + currentYearString;
+                    String currentDateString = currentMonthString + "/" + currentYearString; //MM/yyyy
                     int dataToAdd;
                     if (graphData.containsKey(currentDateString)) {
                         dataToAdd = graphData.get(currentDateString);
                     } else {
                         dataToAdd = 0;
                     }
-                    float cuckedYear = ((float)currentYearValue) / 10000f;
-                    float yValue = currentMonthValue + cuckedYear;
-                    Log.d("FINAL Y VALUE", Float.toString(yValue));
-                    entries.add(new Entry(yValue, (float)(dataToAdd)));
+                    float adjustedYear = ((float)currentYearValue) / 10000f;
+                    float xValue = currentMonthValue + adjustedYear;
+                    Log.d("GRAPH FINAL X VALUE", Float.toString(xValue));
+                    Log.d("GRAPH FINAL Y VALUE", Float.toString(dataToAdd));
+                    entries.add(new Entry(xValue, (float)(dataToAdd)));
                     currentMonthValue += 1;
                 }
             }
-            LineDataSet dataSet = new LineDataSet(entries, "Label");
+            LineDataSet dataSet = new LineDataSet(entries, "Sightings");
             LineData lineData = new LineData(dataSet);
             chart.setData(lineData);
             chart.invalidate();
