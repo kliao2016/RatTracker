@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent"
+    android:backgroundTint="@color/queenBlue"
+    android:orientation="vertical"
+    tools:context="edu.gatech.cs2340.rattracker.controller.RatMapActivity">
+
+    <TextView
+        android:id="@+id/date_range_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/date_range_title"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/buttonGold"
+        android:textStyle="bold" />
+
+    <ProgressBar
+        android:id="@+id/graph_progress_bar"
+        style="@android:style/Widget.ProgressBar.Small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:max="10"
+        android:padding="4dip"></ProgressBar>
+
+    <LinearLayout
+        android:id="@+id/date_range_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/graph_start_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="Start Date"
+            android:inputType="none"
+            android:textColor="@color/common_google_signin_btn_text_dark_pressed" />
+
+        <EditText
+            android:id="@+id/graph_end_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:focusable="false"
+            android:hint="End Date"
+            android:inputType="none"
+            android:textColor="@color/common_google_signin_btn_text_dark_pressed" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/graph_date_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="@color/buttonGold"
+        android:text="@string/select_date_range"
+        android:textColor="@color/deepBlue" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+</LinearLayout>
