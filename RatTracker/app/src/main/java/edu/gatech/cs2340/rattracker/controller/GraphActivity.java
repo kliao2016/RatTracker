@@ -21,16 +21,14 @@ import android.widget.ProgressBar;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,10 +36,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import edu.gatech.cs2340.rattracker.R;
-import edu.gatech.cs2340.rattracker.model.Entry;
 import edu.gatech.cs2340.rattracker.model.RatReport;
 
 public class GraphActivity extends AppCompatActivity {
@@ -50,30 +46,38 @@ public class GraphActivity extends AppCompatActivity {
     private static EditText graphEndDate;
     private Button selectRangeButton;
     private static Map<String, RatReport> reportMap = new HashMap<>();
-    private static List<Integer> monthBuckets;
+    private static Map<String, Integer> graphData = new HashMap<>();
+    private LineChart chart;
+    private List<Entry> entries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graph);
-        LineChart chart = findViewById(R.id.chart);
-        loadSightings();
+        chart = findViewById(R.id.chart);
+        chart.setNoDataText("You have to give me data first, dumbass!");
+        chart.setDrawBorders(true);
+        chart.setBorderWidth(4);
 
-        //Element set gives evrything, reportMap.entryset has getKey getValue, Map.Entry
-
+        //Element set gives everything, reportMap.entryset has getKey getValue, Map.Entry
         graphStartDate = findViewById(R.id.graph_start_date);
         graphEndDate = findViewById(R.id.graph_end_date);
         selectRangeButton = findViewById(R.id.graph_date_button);
+
+        //pulls ratReports from FireBase and populates reportMap with them
+        LoadSightingsTask task = new LoadSightingsTask();
+        task.execute();
 
         setClickListeners();
     }
 
     /**
-     * Method to load rat sightings from database and display them on map
+     * Method to load rat sightings from database and put them into the graphData
      */
     private void loadSightings() {
 
-        // Load reports from reportMap
+        // Load reports from reportMap and use their data to manipulate graphData
         if (!isEmpty(graphStartDate) && !isEmpty(graphEndDate)) {
             SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
             Date startDate = new Date();
@@ -90,96 +94,79 @@ public class GraphActivity extends AppCompatActivity {
                 graphStartDate.setText("");
                 graphEndDate.setText("");
             } else {
-                monthBuckets = new ArrayList<>(endDate.getIndex());
                 for (Map.Entry<String, RatReport> ratReportEntry: reportMap.entrySet()) {
                     if (ratReportEntry != null) {
                         String dateCreated = ratReportEntry.getValue().getDateCreated();
                         String dateTrimmed = dateCreated.substring(0,
-                                dateCreated.indexOf(' '));
+                                dateCreated.indexOf(' ')); ///  MM/dd/yyyy
                         Date ratEntryDate = new Date();
                         try {
                             ratEntryDate = formatter.parse(dateTrimmed);
                         } catch (ParseException e) {
                             Log.d("Date Parse Exception", e.getMessage());
                         }
+                        //if the current report's date is within the selected months/years
+                        //the # of reports made during that corresponding month is incremented
+                        //in the graphData HashMap
                         if (ratEntryDate.compareTo(startDate) >= 0
                                 && ratEntryDate.compareTo(endDate) <= 0) {
-                            //This section needs increment the related index in monthbuckets
+                            String evenShorter = dateCreated.substring(0, 3) //"MM/yyyy"
+                                    + dateCreated.substring(6, dateCreated.indexOf(' '));
+                            if (graphData.containsKey(evenShorter)) {
+                                int oldReportCount = graphData.get(evenShorter);
+                                int reportCount = (oldReportCount += 1);
+                                graphData.put(evenShorter, reportCount);
+                            } else {
+                                graphData.put(evenShorter, 1);
+                            }
                         }
                     }
                 }
+                ///LOGIC FOR USING GRAPHDATA HASHMAP TO MANIPULATE VALUES OF LINECHART
+                entries = new ArrayList<>();
+                String startTextForm = graphStartDate.getText().toString();
+                String endTextForm = graphEndDate.getText().toString();
+                String startMonthSubString = startTextForm.substring(0, startTextForm.indexOf("/")); //"MM"
+                int startMonthValue = Integer.parseInt(startMonthSubString);
+                String remainder = startTextForm.substring(startTextForm.indexOf("/")+1, startTextForm.length());
+                String startYearSubString = remainder.substring(remainder.indexOf("/")+1, remainder.length()); //"yyyy"
+                int startYearValue = Integer.parseInt(startYearSubString);
+                String endMonthSubString = endTextForm.substring(0, endTextForm.indexOf("/")); //"MM"
+                int endMonthValue = Integer.parseInt(endMonthSubString);
+                remainder = endTextForm.substring(endTextForm.indexOf("/")+1, endTextForm.length());
+                String endYearSubString = remainder.substring(remainder.indexOf("/")+1, remainder.length()); //"yyyy"
+                int endYearValue = Integer.parseInt(endYearSubString);
+                int totalMonthDifference = (((endYearValue - startYearValue) * 12)
+                        + (endMonthValue - startMonthValue));
+                int currentMonthValue = startMonthValue;
+                int currentYearValue = startYearValue;
+                for (int i = 0; i < totalMonthDifference + 1; i++) {
+                    if (currentMonthValue > 12) {
+                        currentMonthValue = currentMonthValue % 12;
+                        currentYearValue += 1;
+                    }
+                    String currentMonthString = Integer.toString(currentMonthValue);
+                    String currentYearString = Integer.toString(currentYearValue);
+                    String currentDateString = currentMonthString + "/" + currentYearString;
+                    int dataToAdd;
+                    if (graphData.containsKey(currentDateString)) {
+                        dataToAdd = graphData.get(currentDateString);
+                    } else {
+                        dataToAdd = 0;
+                    }
+                    float cuckedYear = ((float)currentYearValue) / 10000f;
+                    float yValue = currentMonthValue + cuckedYear;
+                    Log.d("FINAL Y VALUE", Float.toString(yValue));
+                    entries.add(new Entry(yValue, (float)(dataToAdd)));
+                    currentMonthValue += 1;
+                }
             }
-        } else {
-            for (Map.Entry<String, RatReport> ratReportEntry: reportMap.entrySet()) {
-                MarkerOptions newReportOptions = new MarkerOptions()
-                        .title("Sighting " + ratReportEntry.getKey())
-                        .position(new LatLng(ratReportEntry.getValue().getLatitude(),
-                                ratReportEntry.getValue().getLongitude()))
-                        .snippet("Sighted: " + ratReportEntry.getValue()
-                                .getDateCreated());
-                mMap.addMarker(newReportOptions);
-            }
+            LineDataSet dataSet = new LineDataSet(entries, "Label");
+            LineData lineData = new LineData(dataSet);
+            chart.setData(lineData);
+            chart.invalidate();
         }
     }
-
-    /**
-     * Finds the index to increment relative to the startDate
-     * @return the index to increment
-     */
-    private int getIndex() { //this needs to find the index related to the month and yeat
-                            //for example march 2016, if its 4 months after the start month,
-                            // would return 4, hasnt been implemented yet
-        int index = 0;
-
-    }
-
-    /**
-     * Defines a fragment that is shown when choosing the date that displays a calendar to the user
-     */
-    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-        private boolean isStart;
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    getActivity(),
-                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                    this,
-                    year, month, day);
-            datePickerDialog.getWindow().setBackgroundDrawable(
-                    new ColorDrawable(Color.TRANSPARENT));
-
-            // Create a new instance of DatePickerDialog and return it
-            return datePickerDialog;
-        }
-
-        public void setStart(boolean start) {
-            this.isStart = start;
-        }
-
-        /**
-         * Method that is called upon closure of the DatePickerFragment
-         * Sets the dateText field to a string in the format "MM/DD/YYYY"
-         * @param view the current view
-         * @param year the entered year
-         * @param month the entered month
-         * @param day the entered day
-         */
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            if (isStart) {
-                graphStartDate.setText((month + 1) + "/" + day + "/" + year);
-            } else {
-                graphEndDate.setText((month + 1) + "/" + day + "/" + year);
-            }
-        }
-    }
-
 
     /**
      * Method that sets the click listeners for the buttons of the activity
@@ -200,6 +187,14 @@ public class GraphActivity extends AppCompatActivity {
             }
         });
 
+        selectRangeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                graphData.clear();
+                loadSightings();
+            }
+        });
+
     }
 
     /**
@@ -208,8 +203,8 @@ public class GraphActivity extends AppCompatActivity {
      */
     public void showDatePickerDialog(View v) {
         FragmentManager fm = getSupportFragmentManager();
-        RatMapActivity.DatePickerFragment newFragment = new RatMapActivity.DatePickerFragment();
-        if (v.getId() == R.id.start_date_text) {
+        myDatePickerFragment newFragment = new myDatePickerFragment();
+        if (v.getId() == R.id.graph_start_date) {
             newFragment.setStart(true);
         }
         newFragment.show(fm, "datePicker");
@@ -247,6 +242,45 @@ public class GraphActivity extends AppCompatActivity {
     }
 
     /**
+     * Defines a fragment that is shown when choosing the date that displays a calendar to the user
+     */
+    public static class myDatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+        private boolean isStart;
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    getActivity(),
+                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                    this,
+                    year, month, day);
+            datePickerDialog.getWindow().setBackgroundDrawable(
+                    new ColorDrawable(Color.TRANSPARENT));
+
+            // Create a new instance of DatePickerDialog and return it
+            return datePickerDialog;
+        }
+
+        public void setStart(boolean start) {
+            this.isStart = start;
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            if (isStart) {
+                graphStartDate.setText((month + 1) + "/" + day + "/" + year);
+            } else {
+                graphEndDate.setText((month + 1) + "/" + day + "/" + year);
+            }
+        }
+    }
+
+    /**
      * Inner class that is an async task that loads rat sighting data before being displayed
      */
     private class LoadSightingsTask extends AsyncTask<Void, Void, Map<String, RatReport>> {
@@ -260,7 +294,7 @@ public class GraphActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            progress = (ProgressBar) findViewById(R.id.rat_map_progress_bar);
+            progress = (ProgressBar) findViewById(R.id.graph_progress_bar);
             progress.setVisibility(View.VISIBLE);
         }
 
@@ -287,7 +321,7 @@ public class GraphActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Map<String, RatReport> ratReports) {
-            RatMapActivity.reportMap = ratReports;
+            reportMap = ratReports;
             progress.setVisibility(View.GONE);
         }
     }

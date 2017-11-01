@@ -272,14 +272,6 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
             this.isStart = start;
         }
 
-        /**
-         * Method that is called upon closure of the DatePickerFragment
-         * Sets the dateText field to a string in the format "MM/DD/YYYY"
-         * @param view the current view
-         * @param year the entered year
-         * @param month the entered month
-         * @param day the entered day
-         */
         public void onDateSet(DatePicker view, int year, int month, int day) {
             if (isStart) {
                 startDateText.setText((month + 1) + "/" + day + "/" + year);

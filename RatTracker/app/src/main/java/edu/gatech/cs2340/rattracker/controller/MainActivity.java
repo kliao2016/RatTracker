@@ -19,16 +19,18 @@ public class MainActivity extends AppCompatActivity {
     private Button ratReportButton;
     private Button addReportButton;
     private Button mapButton;
+    private Button chartButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        logoutButton = (Button) findViewById(R.id.logoutButton);
-        ratReportButton = (Button) findViewById(R.id.ratReportButton);
+        logoutButton = findViewById(R.id.logoutButton);
+        ratReportButton = findViewById(R.id.ratReportButton);
         addReportButton = findViewById(R.id.addReportButton);
         mapButton = findViewById(R.id.mapButton);
+        chartButton = findViewById(R.id.chartButton);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +59,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 goToMap();
+            }
+        });
+
+        chartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToChart();
             }
         });
 
@@ -93,4 +102,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void goToChart() {
+        Intent intent = new Intent(this, GraphActivity.class);
+        startActivity(intent);
+    }
 }
