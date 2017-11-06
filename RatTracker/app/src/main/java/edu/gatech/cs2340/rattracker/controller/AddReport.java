@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.text.format.DateFormat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -20,7 +21,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
@@ -34,15 +34,16 @@ import edu.gatech.cs2340.rattracker.R;
 import edu.gatech.cs2340.rattracker.model.RatReport;
 
 /**
- * Brian Glowniak 10/16/17
+ * Activiy that provides the input fields for entering a new RatReport
+ * Utilizes Google Places API and validates all input
+ * @author Brian Glowniak
  */
-
 public class AddReport extends AppCompatActivity {
     private Spinner boroughs;
     private Spinner locTypes;
     private static EditText dateText;
     private static EditText timeText;
-    private EditText addrText;
+    private EditText addressText;
     private Button cancelButton;
     private Button addReportButton;
     private final int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -55,7 +56,7 @@ public class AddReport extends AppCompatActivity {
 
         dateText = findViewById(R.id.date);
         timeText = findViewById(R.id.time);
-        addrText = findViewById(R.id.address);
+        addressText = findViewById(R.id.address);
         cancelButton = findViewById(R.id.cancelButton);
         addReportButton = findViewById(R.id.addReportButton);
         boroughs = findViewById(R.id.boroughSpinner);
@@ -78,18 +79,22 @@ public class AddReport extends AppCompatActivity {
         String locationType = locTypes.getSelectedItem().toString();
 
         //extract address
-        //this extraction makes certain assumptions about the input (namely, that it is a US addr)
-        String[] tokenizedAddr = address.split(",");
+        //this extraction makes certain assumptions about the input
+        String[] tokenAddress = address.split(",");
 
-        //due to the way the autocomplete works, the address we want will always be before the first comma
-        String incidentAddress = tokenizedAddr[0].toUpperCase();
-        String city = tokenizedAddr[1].trim();
+        //the address we want will always be before the first comma
+        String incidentAddress = tokenAddress[0].toUpperCase();
+        String city = tokenAddress[1].trim();
         double incidentZip = 0;
         try {
             //end of address is zip, USA
-            incidentZip = Double.parseDouble(address.substring(address.length() - 10, address.length() - 5).trim());
+            incidentZip = Double.parseDouble(
+                    address.substring(address.length() - 10, address.length() - 5)
+                            .trim());
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Inputted address may not have a zip code. Defaulted to 0", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,
+                    "Inputted address may not have a zip code. Defaulted to 0",
+                    Toast.LENGTH_SHORT).show();
         }
 
         String borough = boroughs.getSelectedItem().toString().toUpperCase();
@@ -107,9 +112,8 @@ public class AddReport extends AppCompatActivity {
 
     /**
      * Displays the DatePickerFragment
-     * @param v the current view
      */
-    public void showDatePickerDialog(View v) {
+    private void showDatePickerDialog() {
         FragmentManager fm = getSupportFragmentManager();
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(fm, "datePicker");
@@ -117,9 +121,8 @@ public class AddReport extends AppCompatActivity {
 
     /**
      * Displays the TimePickerFragment
-     * @param v the current view
      */
-    public void showTimePickerDialog(View v) {
+    private void showTimePickerDialog() {
         FragmentManager fm = getSupportFragmentManager();
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(fm, "timePicker");
@@ -128,7 +131,9 @@ public class AddReport extends AppCompatActivity {
     /**
      * Defines a fragment that is shown when choosing the date that displays a calendar to the user
      */
-    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+    public static class DatePickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current date as the default date in the picker
@@ -149,6 +154,7 @@ public class AddReport extends AppCompatActivity {
          * @param month the entered month
          * @param day the entered day
          */
+        @Override
         public void onDateSet(DatePicker view, int year, int month, int day) {
             dateText.setText((month + 1) + "/" + day + "/" + year);
         }
@@ -160,6 +166,7 @@ public class AddReport extends AppCompatActivity {
     public static class TimePickerFragment extends DialogFragment
             implements TimePickerDialog.OnTimeSetListener {
 
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current time as the default values for the picker
@@ -174,17 +181,18 @@ public class AddReport extends AppCompatActivity {
 
         /**
          * Method that is called upon closure of the TimePickerFragment
-         * Converts the hour to 12 hr format and sets the timeText field to a string in the format "HH:MM:SS AM/PM"
+         * Sets the timeText field to a string in the 12 hour format "HH:MM:SS AM/PM"
          * @param view the current view
          * @param hourOfDay the hour entered in 24 hr format
          * @param minute the minute entered
          */
+        @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             String minString = "" + minute;
             if (minute < 10) {
                 minString = "0" + minString;
             }
-            String am_pm = "";
+            String am_pm;
             if (hourOfDay < 12) {
                 am_pm = "AM";
                 if (hourOfDay == 0) {
@@ -208,13 +216,14 @@ public class AddReport extends AppCompatActivity {
      */
     private boolean validateInput(String address, String date, String time) {
         //validate date
-        boolean dateV = date != null && date.length() != 0;
+        boolean dateV = (date != null) && (!date.isEmpty());
 
         //validate time
-        boolean timeV = time != null && time.length() != 0;
+        boolean timeV = (time != null) && (!time.isEmpty());
 
-        //validate address. Since we use autocomplete, we just need to check that an addr was entered
-        boolean addressV = address != null && address.length() != 0;
+        //validate address
+        // Since we use autocomplete, we just need to check that an address was entered
+        boolean addressV = (address != null) && (!address.isEmpty());
 
         String toastMessage = "";
         if (!dateV) {
@@ -233,7 +242,7 @@ public class AddReport extends AppCompatActivity {
     }
 
     /**
-     * Method that populates the borough and location type spinners with the corresponding string arrays
+     * Method that populates the borough and location type spinners
      */
     private void populateSpinners() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -257,20 +266,27 @@ public class AddReport extends AppCompatActivity {
                     .setTypeFilter(AutocompleteFilter.TYPE_FILTER_ADDRESS).setCountry("US")
                     .build();
             Intent intent =
-                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY).setBoundsBias(new LatLngBounds(
+                    new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                            .setBoundsBias(new LatLngBounds(
                             new LatLng(40.5, -74.35),
-                            new LatLng(40.95, -73.5))).setFilter(typeFilter).build(this);
+                            new LatLng(40.95, -73.5)))
+                            .setFilter(typeFilter).build(this);
             startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException e) {
-            Toast.makeText(this, "Error. Google Play Services are not up to date", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,
+                    "Error. Google Play Services are not up to date",
+                    Toast.LENGTH_SHORT).show();
         } catch (GooglePlayServicesNotAvailableException e) {
-            Toast.makeText(this, "Error. Google Play Services unavailable", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,
+                    "Error. Google Play Services unavailable",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
     /**
      * Callback function upon closing an activity opened for a result
-     * Used specifically for the PlaceAutocomplete intent to pass on the user entered data to the add report activity
+     * Used specifically for the PlaceAutocomplete intent
+     * Passes on the user entered data to the add report activity
      * @param requestCode specifies what functionality was requested
      * @param resultCode specifies the result of the activity
      * @param data contains the data entered when the intent was open
@@ -280,11 +296,12 @@ public class AddReport extends AppCompatActivity {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 place = PlaceAutocomplete.getPlace(this, data);
-                addrText.setText(place.getAddress());
+                addressText.setText(place.getAddress());
 
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
-                Status status = PlaceAutocomplete.getStatus(this, data);
-                Toast.makeText(this, "Error. Please re-enter the address", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,
+                        "Error. Please re-enter the address",
+                        Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -296,18 +313,18 @@ public class AddReport extends AppCompatActivity {
         dateText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDatePickerDialog(v);
+                showDatePickerDialog();
             }
         });
 
         timeText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showTimePickerDialog(v);
+                showTimePickerDialog();
             }
         });
 
-        addrText.setOnClickListener(new View.OnClickListener() {
+        addressText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 generateAddressCompletion();
@@ -324,11 +341,13 @@ public class AddReport extends AppCompatActivity {
         addReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String address = addrText.getText().toString();
+                String address = addressText.getText().toString();
                 String date = dateText.getText().toString();
                 String time = timeText.getText().toString();
                 if (addNewReport(address, date, time)) {
-                    Toast.makeText(AddReport.this, "Report successfully added!", Toast.LENGTH_SHORT).show();
+                    //noinspection ChainedMethodCall
+                    Toast.makeText(AddReport.this,
+                            "Report successfully added!", Toast.LENGTH_SHORT).show();
                     finish();
                 }
             }
