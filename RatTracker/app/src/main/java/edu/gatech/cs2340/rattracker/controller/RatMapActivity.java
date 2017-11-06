@@ -72,6 +72,11 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
         setClickListeners();
     }
 
+    /**
+     * Private method to check if Google services are available
+     *
+     * @return true if Google services are available and false otherwise
+     */
     private boolean googleServicesAvailable() {
         GoogleApiAvailability api = GoogleApiAvailability.getInstance();
         int isAvailable = api.isGooglePlayServicesAvailable(this);
