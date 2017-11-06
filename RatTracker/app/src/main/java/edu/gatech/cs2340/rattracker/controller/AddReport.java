@@ -9,7 +9,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -30,7 +29,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import edu.gatech.cs2340.rattracker.R;
 import edu.gatech.cs2340.rattracker.model.RatReport;
@@ -68,21 +66,20 @@ public class AddReport extends AppCompatActivity {
     }
 
     /**
-     * Method that creates a new RatReport using the user's inputted data and then adds to the database
-     * Calls validateInput() to validate the data before creating a report
+     * Method that creates a new RatReport and then adds to the database
+     * Calls validateInput() to validate the data
      * @return whether the report was successfully added
      */
-    private boolean addNewReport() {
-        if (!validateInput()) {
+    private boolean addNewReport(String address, String date, String time) {
+        if (!validateInput(address, date, time)) {
             return false;
         }
-        String dateCreated = dateText.getText().toString() + " " + timeText.getText().toString();
+        String dateCreated = date.trim() + " " + time.trim();
         String locationType = locTypes.getSelectedItem().toString();
 
         //extract address
         //this extraction makes certain assumptions about the input (namely, that it is a US addr)
-        String addr = place.getAddress().toString().trim();
-        String[] tokenizedAddr = addr.split(",");
+        String[] tokenizedAddr = address.split(",");
 
         //due to the way the autocomplete works, the address we want will always be before the first comma
         String incidentAddress = tokenizedAddr[0].toUpperCase();
@@ -90,7 +87,7 @@ public class AddReport extends AppCompatActivity {
         double incidentZip = 0;
         try {
             //end of address is zip, USA
-            incidentZip = Double.parseDouble(addr.substring(addr.length() - 10, addr.length() - 5).trim());
+            incidentZip = Double.parseDouble(address.substring(address.length() - 10, address.length() - 5).trim());
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Inputted address may not have a zip code. Defaulted to 0", Toast.LENGTH_SHORT).show();
         }
@@ -209,20 +206,15 @@ public class AddReport extends AppCompatActivity {
      * Only needs to check address, date, and time due to the other inputs being controlled
      * @return whether the input for the report is valid
      */
-    private boolean validateInput() {
+    private boolean validateInput(String address, String date, String time) {
         //validate date
-        boolean dateV = dateText.getText().toString().length() != 0;
+        boolean dateV = date != null && date.length() != 0;
 
         //validate time
-        boolean timeV = timeText.getText().toString().length() != 0;
-
-        /*SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss");
-        String date = df.format(Calendar.getInstance().getTime());
-        String inputDate = dateText.getText().toString();
-        boolean chronoV = true;*/
+        boolean timeV = time != null && time.length() != 0;
 
         //validate address. Since we use autocomplete, we just need to check that an addr was entered
-        boolean addressV = addrText.getText().toString().length() != 0;
+        boolean addressV = address != null && address.length() != 0;
 
         String toastMessage = "";
         if (!dateV) {
@@ -231,11 +223,9 @@ public class AddReport extends AppCompatActivity {
             toastMessage = "you must enter a time";
         } else if(!addressV) {
             toastMessage = "you must enter an address";
-        } /*else if(!chronoV) {
-            toastMessage = "date and/or time is after the current date/time";
-        }*/
+        }
 
-        boolean isValid = dateV && timeV && addressV; // && chronoV;
+        boolean isValid = dateV && timeV && addressV;
         if (!isValid) {
             Toast.makeText(this, "Invalid input: " + toastMessage, Toast.LENGTH_SHORT).show();
         }
@@ -269,7 +259,7 @@ public class AddReport extends AppCompatActivity {
             Intent intent =
                     new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY).setBoundsBias(new LatLngBounds(
                             new LatLng(40.5, -74.35),
-                            new LatLng(40.95, -73.5))).setFilter(typeFilter).build(this);;
+                            new LatLng(40.95, -73.5))).setFilter(typeFilter).build(this);
             startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException e) {
             Toast.makeText(this, "Error. Google Play Services are not up to date", Toast.LENGTH_SHORT).show();
@@ -334,7 +324,10 @@ public class AddReport extends AppCompatActivity {
         addReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (addNewReport()) {
+                String address = addrText.getText().toString();
+                String date = dateText.getText().toString();
+                String time = timeText.getText().toString();
+                if (addNewReport(address, date, time)) {
                     Toast.makeText(AddReport.this, "Report successfully added!", Toast.LENGTH_SHORT).show();
                     finish();
                 }
