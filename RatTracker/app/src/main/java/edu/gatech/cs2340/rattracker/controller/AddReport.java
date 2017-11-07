@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.text.Editable;
 import android.text.format.DateFormat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -34,15 +35,15 @@ import edu.gatech.cs2340.rattracker.R;
 import edu.gatech.cs2340.rattracker.model.RatReport;
 
 /**
- * Activiy that provides the input fields for entering a new RatReport
+ * Activity that provides the input fields for entering a new RatReport
  * Utilizes Google Places API and validates all input
  * @author Brian Glowniak
  */
 public class AddReport extends AppCompatActivity {
     private Spinner boroughs;
     private Spinner locTypes;
-    private static EditText dateText;
-    private static EditText timeText;
+    private EditText dateText;
+    private EditText timeText;
     private EditText addressText;
     private Button cancelButton;
     private Button addReportButton;
@@ -89,8 +90,7 @@ public class AddReport extends AppCompatActivity {
         try {
             //end of address is zip, USA
             incidentZip = Double.parseDouble(
-                    address.substring(address.length() - 10, address.length() - 5)
-                            .trim());
+                    address.substring(address.length() - 10, address.length() - 5));
         } catch (NumberFormatException e) {
             Toast.makeText(this,
                     "Inputted address may not have a zip code. Defaulted to 0",
@@ -129,6 +129,20 @@ public class AddReport extends AppCompatActivity {
     }
 
     /**
+     * Callback function used within the DatePickerFragment to set the date text field
+     * Solves the problem of defining the text as static
+     * @param date the new date
+     */
+    private void setDateText(CharSequence date) { this.dateText.setText(date); }
+
+    /**
+     * Callback function used within the TimePickerFragment to set the time text field
+     * Solves the problem of defining the text as static
+     * @param time the new time
+     */
+    private void setTimeText(CharSequence time) { this.timeText.setText(time); }
+
+    /**
      * Defines a fragment that is shown when choosing the date that displays a calendar to the user
      */
     public static class DatePickerFragment extends DialogFragment
@@ -156,7 +170,8 @@ public class AddReport extends AppCompatActivity {
          */
         @Override
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            dateText.setText((month + 1) + "/" + day + "/" + year);
+            AddReport activity = (AddReport) this.getActivity();
+            activity.setDateText((month + 1) + "/" + day + "/" + year);
         }
     }
 
@@ -193,19 +208,21 @@ public class AddReport extends AppCompatActivity {
                 minString = "0" + minString;
             }
             String am_pm;
+            String hourString = "" + hourOfDay;
             if (hourOfDay < 12) {
                 am_pm = "AM";
                 if (hourOfDay == 0) {
-                    hourOfDay = 12;
+                    hourString = "12";
                 }
 
             } else {
                 am_pm = "PM";
                 if(hourOfDay != 12) {
-                    hourOfDay -= 12;
+                    hourString = "" + (hourOfDay - 12);
                 }
             }
-            timeText.setText(hourOfDay + ":" + minString + ":" + "00" + " " + am_pm);
+            AddReport activity = (AddReport) this.getActivity();
+            activity.setTimeText(hourString + ":" + minString + ":" + "00" + " " + am_pm);
         }
     }
 
@@ -341,10 +358,10 @@ public class AddReport extends AppCompatActivity {
         addReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String address = addressText.getText().toString();
-                String date = dateText.getText().toString();
-                String time = timeText.getText().toString();
-                if (addNewReport(address, date, time)) {
+                Editable address = addressText.getText();
+                Editable date = dateText.getText();
+                Editable time = timeText.getText();
+                if (addNewReport(address.toString(), date.toString(), time.toString())) {
                     //noinspection ChainedMethodCall
                     Toast.makeText(AddReport.this,
                             "Report successfully added!", Toast.LENGTH_SHORT).show();

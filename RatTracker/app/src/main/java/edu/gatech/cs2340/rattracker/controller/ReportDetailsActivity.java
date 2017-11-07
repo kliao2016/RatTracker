@@ -24,11 +24,13 @@ public class ReportDetailsActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         RatReport report = bundle.getParcelable("RatReport");
-        getSupportActionBar().setTitle(report.getDateCreated());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if (report != null) {
+            getSupportActionBar().setTitle(report.getDateCreated());
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        populateData(report);
+            populateData(report);
+        }
     }
 
     /**
@@ -43,14 +45,25 @@ public class ReportDetailsActivity extends AppCompatActivity {
         TextView lat = findViewById(R.id.lat);
         TextView lng = findViewById(R.id.lng);
 
+        //use string variables to avoid checker internationalization issues
+        String dateText = "Date: " + report.getDateCreated();
+        date.setText(dateText);
 
-        date.setText("Date: " + report.getDateCreated());
-        String addressString = report.getIncidentAddress() + " " + (int) report.getIncidentZip();
-        address.setText("Address: " + addressString);
-        borough.setText("Borough: " + report.getBorough());
-        locType.setText("Location Type: " + report.getLocationType());
-        lat.setText("Latitude: " + report.getLatitude());
-        lng.setText("Longitude: " + report.getLongitude());
+        String addressString = "Address: " + report.getIncidentAddress()
+                + " " + (int) report.getIncidentZip();
+        address.setText(addressString);
+
+        String boroughText = "Borough: " + report.getBorough();
+        borough.setText(boroughText);
+
+        String locTypeText = "Location Type: " + report.getLocationType();
+        locType.setText(locTypeText);
+
+        String latText = "Latitude: " + report.getLatitude();
+        lat.setText(latText);
+
+        String lngText = "Longitude: " + report.getLongitude();
+        lng.setText(lngText);
     }
 
 }
