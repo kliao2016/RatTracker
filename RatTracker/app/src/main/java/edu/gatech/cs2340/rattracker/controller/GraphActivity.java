@@ -119,9 +119,11 @@ public class GraphActivity extends AppCompatActivity {
             } else {
                 dataToAdd = 0;
             }
-            final float yearAdjuster = 10000f;
-            float adjustedYear = ((float)currentYearValue) / yearAdjuster;
-            float xValue = currentMonthValue + adjustedYear;
+            final float monthAdjuster = 100f;
+            final int intervalSpacer = 8;
+            float adjustedYear = currentYearValue % 100;
+            float adjustedMonth = intervalSpacer * (currentMonthValue / monthAdjuster);
+            float xValue = adjustedYear + adjustedMonth;
             Log.d("GRAPH FINAL X VALUE", Float.toString(xValue));
             Log.d("GRAPH FINAL Y VALUE", Float.toString(dataToAdd));
             entries.add(new Entry(xValue, (float)(dataToAdd)));
