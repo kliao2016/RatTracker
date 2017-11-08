@@ -47,8 +47,8 @@ import edu.gatech.cs2340.rattracker.model.RatReport;
 public class RatMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private static EditText startDateText;
-    private static EditText endDateText;
+    private EditText startDateText;
+    private EditText endDateText;
     private Button selectRangeButton;
     private static Map<String, RatReport> reportMap = new HashMap<>();
 
@@ -172,12 +172,14 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
                 showDatePickerDialog(v);
             }
         });
-
     }
+
+    private void setStartDateText(CharSequence startDate) { this.startDateText.setText(startDate); }
+
+    private void setEndDateText(CharSequence endDate) { this.endDateText.setText(endDate); }
 
     /**
      * Method to load rat sightings from database and display them on map
-     *
      * @param googleMap the map to be displayed
      */
     private void loadSightings(GoogleMap googleMap) {
@@ -278,10 +280,11 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
+            RatMapActivity activity = (RatMapActivity) this.getActivity();
             if (isStart) {
-                startDateText.setText((month + 1) + "/" + day + "/" + year);
+                activity.setStartDateText((month + 1) + "/" + day + "/" + year);
             } else {
-                endDateText.setText((month + 1) + "/" + day + "/" + year);
+                activity.setEndDateText((month + 1) + "/" + day + "/" + year);
             }
         }
     }
@@ -331,5 +334,4 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
             progress.setVisibility(View.GONE);
         }
     }
-
 }
