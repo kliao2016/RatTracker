@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -44,14 +46,24 @@ import java.util.Map;
 import edu.gatech.cs2340.rattracker.R;
 import edu.gatech.cs2340.rattracker.model.RatReport;
 
+/**
+ * Created by Kevin Liao on 10/28/17
+ *
+ * Activity class that loads rat sightings onto a Google Map
+ */
 public class RatMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private EditText startDateText;
     private EditText endDateText;
     private Button selectRangeButton;
+    private static final double LATITUDE = 40.713;
+    private static final double LONGITUDE = -74.01;
+    private static final float ZOOM = 10;
+    private static final int REPORTS = 300;
     private static Map<String, RatReport> reportMap = new HashMap<>();
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rat_map);
@@ -66,7 +78,8 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
         selectRangeButton = findViewById(R.id.select_date_button);
 
         if (googleServicesAvailable()) {
-            Toast.makeText(this, "Connection to Google Maps Services successful", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Connection to Google Maps Services successful",
+                    Toast.LENGTH_SHORT).show();
         }
 
         setClickListeners();
@@ -86,7 +99,8 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
             Dialog userSolvableDialog = api.getErrorDialog(this, isAvailable, 0);
             userSolvableDialog.show();
         } else {
-            Toast.makeText(this, "Can't connect to Google Services", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Can't connect to Google Services",
+                    Toast.LENGTH_SHORT).show();
         }
         return false;
     }
@@ -95,11 +109,12 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
+     *
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
+     *
+     * The map is centered on New York City, where the rat sightings take place
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -107,22 +122,19 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
         LoadSightingsTask task = new LoadSightingsTask();
         task.execute();
 
-        // Center maps on geographic center of USA
-        LatLng ny = new LatLng(40.713, -74.01);
-        CameraUpdate zoomCamera = CameraUpdateFactory.newLatLngZoom(ny, 10);
+        // Center maps on geographic center of NY
+        LatLng ny = new LatLng(LATITUDE, LONGITUDE);
+        CameraUpdate zoomCamera = CameraUpdateFactory.newLatLngZoom(ny, ZOOM);
         mMap.moveCamera(zoomCamera);
     }
 
     /**
-     * Method to create custom alert dialog popup
-     *
-     * @param title the title of the alert
-     * @param message the message of the alert
+     * Method to create custom alert dialog popup if the date range is invalid
      */
-    private void generateDateRangeAlert(int title, int message) {
+    private void generateDateRangeAlert() {
         AlertDialog.Builder loginAlertBuilder = new AlertDialog.Builder(this);
-        loginAlertBuilder.setTitle(title)
-                .setMessage(message)
+        loginAlertBuilder.setTitle(R.string.valid_range_title)
+                .setMessage(R.string.valid_range_info)
                 .setPositiveButton(R.string.popup_button_okay,
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -138,11 +150,13 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
      * Displays the DatePickerFragment
      * @param v the current view
      */
-    public void showDatePickerDialog(View v) {
+    private void showDatePickerDialog(View v) {
         FragmentManager fm = getSupportFragmentManager();
         DatePickerFragment newFragment = new DatePickerFragment();
         if (v.getId() == R.id.start_date_text) {
             newFragment.setStart(true);
+        } else {
+            newFragment.setStart(false);
         }
         newFragment.show(fm, "datePicker");
     }
@@ -186,7 +200,7 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
         mMap = googleMap;
 
         // Load reports from reportMap
-        if (!isEmpty(startDateText) && !isEmpty(endDateText)) {
+        if (isFilled(startDateText) && isFilled(endDateText)) {
             SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
             Date startDate = new Date();
             Date endDate = new Date();
@@ -197,8 +211,7 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
                 Log.d("Date Parse Exception", e.getMessage());
             }
             if (startDate.compareTo(endDate) > 0) {
-                generateDateRangeAlert(R.string.valid_range_title,
-                        R.string.valid_range_info);
+                generateDateRangeAlert();
                 startDateText.setText("");
                 endDateText.setText("");
             } else {
@@ -213,8 +226,8 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
                         } catch (ParseException e) {
                             Log.d("Date Parse Exception", e.getMessage());
                         }
-                        if (ratEntryDate.compareTo(startDate) >= 0
-                                && ratEntryDate.compareTo(endDate) <= 0) {
+                        if ((ratEntryDate.compareTo(startDate) >= 0)
+                                && (ratEntryDate.compareTo(endDate) <= 0)) {
                             MarkerOptions newReportOptions = new MarkerOptions()
                                     .title("Sighting " + ratReportEntry.getKey())
                                     .position(new LatLng(ratReportEntry.getValue().getLatitude(),
@@ -245,17 +258,20 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
      * @param editText the EditText field to check
      * @return true if the EditText field is empty and false otherwise
      */
-    private boolean isEmpty(EditText editText) {
-        return editText.getText().toString().trim().length() == 0;
+    private boolean isFilled(EditText editText) {
+        // Cannot call toString().isEmpty() because it doesn't account for whitespace
+        return editText.getText().toString().trim().length() != 0;
     }
 
     /**
      * Defines a fragment that is shown when choosing the date that displays a calendar to the user
      */
-    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+    public static class DatePickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
         private boolean isStart;
 
         @Override
+        @NonNull
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current date as the default date in the picker
             final Calendar c = Calendar.getInstance();
@@ -268,17 +284,27 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
                     android.R.style.Theme_Holo_Light_Dialog_MinWidth,
                     this,
                     year, month, day);
-            datePickerDialog.getWindow().setBackgroundDrawable(
-                    new ColorDrawable(Color.TRANSPARENT));
+
+            Window dateWindow = datePickerDialog.getWindow();
+            if (dateWindow != null) {
+                dateWindow.setBackgroundDrawable(
+                        new ColorDrawable(Color.TRANSPARENT));
+            }
 
             // Create a new instance of DatePickerDialog and return it
             return datePickerDialog;
         }
 
+        /**
+         * Setter for isStart boolean
+         *
+         * @param start the boolean to check if the selected EditText is the start date picker
+         */
         public void setStart(boolean start) {
             this.isStart = start;
         }
 
+        @Override
         public void onDateSet(DatePicker view, int year, int month, int day) {
             RatMapActivity activity = (RatMapActivity) this.getActivity();
             if (isStart) {
@@ -294,22 +320,23 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
      */
     private class LoadSightingsTask extends AsyncTask<Void, Void, Map<String, RatReport>> {
         private ProgressBar progress;
-        private Map<String, RatReport> asyncMap = new HashMap<>();
+        private Map<String, RatReport> asyncMap;
 
-        private Query databaseRef = FirebaseDatabase.getInstance()
+        private final Query DATABASE = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("reports")
-                .limitToLast(300);
+                .limitToLast(REPORTS);
 
         @Override
         protected void onPreExecute() {
-            progress = (ProgressBar) findViewById(R.id.rat_map_progress_bar);
+            asyncMap = new HashMap<>();
+            progress = findViewById(R.id.rat_map_progress_bar);
             progress.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected Map<String, RatReport> doInBackground(Void... voids) {
-            databaseRef.addValueEventListener(new ValueEventListener() {
+            DATABASE.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot ratSnapshot: dataSnapshot.getChildren()) {
