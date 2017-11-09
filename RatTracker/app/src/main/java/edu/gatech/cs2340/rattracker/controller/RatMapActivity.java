@@ -53,14 +53,16 @@ import edu.gatech.cs2340.rattracker.model.RatReport;
  */
 public class RatMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
-    private EditText startDateText;
-    private EditText endDateText;
-    private Button selectRangeButton;
+    // Constant variables
     private static final double LATITUDE = 40.713;
     private static final double LONGITUDE = -74.01;
     private static final float ZOOM = 10;
     private static final int REPORTS = 300;
+
+    private GoogleMap mMap;
+    private EditText startDateText;
+    private EditText endDateText;
+    private Button selectRangeButton;
     private static Map<String, RatReport> reportMap = new HashMap<>();
 
     @Override
@@ -77,32 +79,25 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
         endDateText = findViewById(R.id.end_date_text);
         selectRangeButton = findViewById(R.id.select_date_button);
 
-        if (googleServicesAvailable()) {
-            Toast.makeText(this, "Connection to Google Maps Services successful",
-                    Toast.LENGTH_SHORT).show();
-        }
-
+        testGoogleServicesAvailable();
         setClickListeners();
     }
 
     /**
      * Private method to check if Google services are available
      *
-     * @return true if Google services are available and false otherwise
+     * Displays a popup dialog if Google services are not available
      */
-    private boolean googleServicesAvailable() {
+    private void testGoogleServicesAvailable() {
         GoogleApiAvailability api = GoogleApiAvailability.getInstance();
         int isAvailable = api.isGooglePlayServicesAvailable(this);
-        if (isAvailable == ConnectionResult.SUCCESS) {
-            return true;
-        } else if (api.isUserResolvableError(isAvailable)) {
+        if (api.isUserResolvableError(isAvailable)) {
             Dialog userSolvableDialog = api.getErrorDialog(this, isAvailable, 0);
             userSolvableDialog.show();
         } else {
             Toast.makeText(this, "Can't connect to Google Services",
                     Toast.LENGTH_SHORT).show();
         }
-        return false;
     }
 
 
