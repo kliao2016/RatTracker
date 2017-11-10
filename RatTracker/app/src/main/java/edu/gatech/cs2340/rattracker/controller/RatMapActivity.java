@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.gatech.cs2340.rattracker.R;
+import edu.gatech.cs2340.rattracker.model.LoadSightingsTask;
 import edu.gatech.cs2340.rattracker.model.RatReport;
 
 /**
@@ -56,13 +57,12 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
     private static final double LATITUDE = 40.713;
     private static final double LONGITUDE = -74.01;
     private static final float ZOOM = 10;
-    private static final int REPORTS = 300;
 
     private GoogleMap mMap;
     private EditText startDateText;
     private EditText endDateText;
     private Button selectRangeButton;
-    private static Map<String, RatReport> reportMap = new HashMap<>();
+    private Map<String, RatReport> reportMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,10 +111,13 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
      * The map is centered on New York City, where the rat sightings take place
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LoadSightingsTask task = new LoadSightingsTask();
-        task.execute();
+        Map<String, RatReport>[] asyncParams = (Map<String, RatReport>[]) new Map[1];
+        asyncParams[0] = reportMap;
+        LoadSightingsTask asyncTask = new LoadSightingsTask();
+        asyncTask.execute(asyncParams);
 
         // Center maps on geographic center of NY
         LatLng ny = new LatLng(LATITUDE, LONGITUDE);
@@ -309,50 +312,50 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
         }
     }
 
-    /**
-     * Inner class that is an async task that loads rat sighting data before being displayed
-     */
-    private class LoadSightingsTask extends AsyncTask<Void, Void, Map<String, RatReport>> {
-        private ProgressBar progress;
-        private Map<String, RatReport> asyncMap;
-
-        private final Query DATABASE = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("reports")
-                .limitToLast(REPORTS);
-
-        @Override
-        protected void onPreExecute() {
-            asyncMap = new HashMap<>();
-            progress = findViewById(R.id.rat_map_progress_bar);
-            progress.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Map<String, RatReport> doInBackground(Void... voids) {
-            DATABASE.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot ratSnapshot: dataSnapshot.getChildren()) {
-                        RatReport ratReport = ratSnapshot.getValue(RatReport.class);
-                        if (ratReport != null) {
-                            asyncMap.put(ratSnapshot.getKey(), ratReport);
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-            return asyncMap;
-        }
-
-        @Override
-        protected void onPostExecute(Map<String, RatReport> ratReports) {
-            RatMapActivity.reportMap = ratReports;
-            progress.setVisibility(View.GONE);
-        }
-    }
+//    /**
+//     * Inner class that is an async task that loads rat sighting data before being displayed
+//     */
+//    private class LoadSightingsTask extends AsyncTask<Void, Void, Map<String, RatReport>> {
+//        private ProgressBar progress;
+//        private Map<String, RatReport> asyncMap;
+//
+//        private final Query DATABASE = FirebaseDatabase.getInstance()
+//                .getReference()
+//                .child("reports")
+//                .limitToLast(REPORTS);
+//
+//        @Override
+//        protected void onPreExecute() {
+//            asyncMap = new HashMap<>();
+//            progress = findViewById(R.id.rat_map_progress_bar);
+//            progress.setVisibility(View.VISIBLE);
+//        }
+//
+//        @Override
+//        protected Map<String, RatReport> doInBackground(Void... voids) {
+//            DATABASE.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    for (DataSnapshot ratSnapshot: dataSnapshot.getChildren()) {
+//                        RatReport ratReport = ratSnapshot.getValue(RatReport.class);
+//                        if (ratReport != null) {
+//                            asyncMap.put(ratSnapshot.getKey(), ratReport);
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
+//            return asyncMap;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Map<String, RatReport> ratReports) {
+//            RatMapActivity.reportMap = ratReports;
+//            progress.setVisibility(View.GONE);
+//        }
+//    }
 }
