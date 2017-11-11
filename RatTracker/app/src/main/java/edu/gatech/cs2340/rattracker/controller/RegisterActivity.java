@@ -145,7 +145,7 @@ public class RegisterActivity extends AppCompatActivity {
      * Method to check if an EditText field is empty
      *
      * @param editText the EditText field to check
-     * @return true if the EditText field is empty and false otherwise
+     * @return true if the EditText field is empty, otherwise false
      */
     private boolean isFull(EditText editText) {
         return !editText.getText().toString().trim().isEmpty();
