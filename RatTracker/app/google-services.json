@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "31361611803-6eldukks9oafgtv3jbgfobomo256n9ct.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.gatech.cs2340.rattracker",
+            "certificate_hash": "fccdde4f4171968a213f4691ecedc10a77e71cec"
+          }
+        },
+        {
           "client_id": "31361611803-2oisud1udnek5jpucoes63vtt63qrpgp.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
