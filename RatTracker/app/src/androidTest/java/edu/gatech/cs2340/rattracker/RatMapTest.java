@@ -3,6 +3,8 @@ package edu.gatech.cs2340.rattracker;
 import android.support.test.rule.ActivityTestRule;
 import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
+import android.test.ActivityInstrumentationTestCase2;
+import android.widget.EditText;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -11,8 +13,11 @@ import org.junit.runner.RunWith;
 
 import edu.gatech.cs2340.rattracker.controller.GraphActivity;
 import edu.gatech.cs2340.rattracker.controller.RatMapActivity;
+import edu.gatech.cs2340.rattracker.model.MapDatePickerFragment;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.*;
 
@@ -22,21 +27,26 @@ import static android.support.test.espresso.action.ViewActions.click;
  * Created by kevinliao on 11/13/17.
  */
 
+@RunWith(AndroidJUnit4.class)
 public class RatMapTest {
 
+    private EditText text;
+
     @Rule
-    public ActivityTestRule<RatMapActivity> mapActivity = new ActivityTestRule<>(RatMapActivity.class);
+    public ActivityTestRule<RatMapActivity> activity = new ActivityTestRule<>(RatMapActivity.class);
 
     @Test
-    public void loadPinsWithoutRangeMapNullTest() {
-        // Assert not null before method call
-        assertTrue(mapActivity.getActivity().getReportMap() != null);
+    public void onDateSetTest() {
 
         // Button that calls class method
+        onView(withId(R.id.start_date_text)).perform(replaceText("10/10/2016"), closeSoftKeyboard());
+        onView(withId(R.id.end_date_text)).perform(replaceText("10/15/2017"), closeSoftKeyboard());
         onView(withId(R.id.select_date_button)).perform(click());
+        text = activity.getActivity().getStartDateText();
+        assertTrue(text.getText().toString().equals("10/10/2016"));
 
-        // Assert not null after method call
-        assertTrue(mapActivity.getActivity().getReportMap() != null);
+        text = activity.getActivity().getEndDateText();
+        assertTrue(text.getText().toString().equals("10/15/2017"));
     }
 
 }

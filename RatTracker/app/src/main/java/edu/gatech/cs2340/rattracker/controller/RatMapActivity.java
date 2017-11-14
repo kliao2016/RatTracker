@@ -1,22 +1,15 @@
 package edu.gatech.cs2340.rattracker.controller;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SimpleDateFormat;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -30,13 +23,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import edu.gatech.cs2340.rattracker.R;
 import edu.gatech.cs2340.rattracker.model.LoadSightingsTask;
+import edu.gatech.cs2340.rattracker.model.MapDatePickerFragment;
 import edu.gatech.cs2340.rattracker.model.RatReport;
 
 /**
@@ -55,15 +48,24 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
     private EditText startDateText;
     private EditText endDateText;
     private Button selectRangeButton;
-    private final Map<String, RatReport> reportMap = new HashMap<String, RatReport>();
+    private final Map<String, RatReport> reportMap = new HashMap<>();
 
     /**
-     * Getter to return a HashMap of all rat sighting info
+     * Getter to return the start date
      *
-     * @return the HashMap of all rat sighting info
+     * @return the the start date of date range
      */
-    public Map<String, RatReport> getReportMap() {
-        return this.reportMap;
+    public EditText getStartDateText() {
+        return this.startDateText;
+    }
+
+    /**
+     * Getter to return the end date
+     *
+     * @return the the end date of date range
+     */
+    public EditText getEndDateText() {
+        return this.endDateText;
     }
 
     @Override
@@ -152,7 +154,8 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
      */
     private void showDatePickerDialog(View v) {
         FragmentManager fm = getSupportFragmentManager();
-        DatePickerFragment newFragment = new DatePickerFragment();
+        MapDatePickerFragment newFragment = new MapDatePickerFragment();
+        newFragment.setRatMapActivity(this);
         if (v.getId() == R.id.start_date_text) {
             newFragment.setStart(true);
         } else {
@@ -188,11 +191,21 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
         });
     }
 
-    private void setStartDateText(CharSequence startDate) {
+    /**
+     * Method to set the starting date of date range
+     *
+     * @param startDate the start date of the date range
+     */
+    public void setStartDateText(CharSequence startDate) {
         this.startDateText.setText(startDate);
     }
 
-    private void setEndDateText(CharSequence endDate) {
+    /**
+     * Method to set the ending date of the date range
+     *
+     * @param endDate the end date of the date range
+     */
+    public void setEndDateText(CharSequence endDate) {
         this.endDateText.setText(endDate);
     }
 
@@ -292,58 +305,6 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
     private boolean isFilled(EditText editText) {
         // Cannot call toString().isEmpty() because it doesn't account for whitespace
         return editText.getText().toString().trim().length() != 0;
-    }
-
-    /**
-     * Defines a fragment that is shown when choosing the date that displays a calendar to the user
-     */
-    public static class DatePickerFragment extends DialogFragment
-            implements DatePickerDialog.OnDateSetListener {
-        private boolean isStart;
-
-        @Override
-        @NonNull
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    getActivity(),
-                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                    this,
-                    year, month, day);
-
-            Window dateWindow = datePickerDialog.getWindow();
-            if (dateWindow != null) {
-                dateWindow.setBackgroundDrawable(
-                        new ColorDrawable(Color.TRANSPARENT));
-            }
-
-            // Create a new instance of DatePickerDialog and return it
-            return datePickerDialog;
-        }
-
-        /**
-         * Setter for isStart boolean
-         *
-         * @param start the boolean to check if the selected EditText is the start date picker
-         */
-        public void setStart(boolean start) {
-            this.isStart = start;
-        }
-
-        @Override
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            RatMapActivity activity = (RatMapActivity) this.getActivity();
-            if (isStart) {
-                activity.setStartDateText((month + 1) + "/" + day + "/" + year);
-            } else {
-                activity.setEndDateText((month + 1) + "/" + day + "/" + year);
-            }
-        }
     }
 
 }
