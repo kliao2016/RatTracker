@@ -213,11 +213,11 @@ public class GraphActivity extends AppCompatActivity {
             } else {
                 populateDataHashMap(startDate, endDate, formatter);
                 setChartValues();
+                LineDataSet dataSet = new LineDataSet(entries, "Sightings");
+                LineData lineData = new LineData(dataSet);
+                chart.setData(lineData);
+                chart.invalidate();
             }
-            LineDataSet dataSet = new LineDataSet(entries, "Sightings");
-            LineData lineData = new LineData(dataSet);
-            chart.setData(lineData);
-            chart.invalidate();
         }
     }
 
@@ -351,11 +351,11 @@ public class GraphActivity extends AppCompatActivity {
         private ProgressBar progress;
         private final Map<String, RatReport> asyncMap = new HashMap<>();
 
-        final int instanceCap = 300;
+        //final int instanceCap = 300;
         private final Query databaseRef = FirebaseDatabase.getInstance()
                 .getReference()
-                .child("reports")
-                .limitToLast(instanceCap);
+                .child("reports");
+                //.limitToLast(instanceCap);
 
         @Override
         protected void onPreExecute() {
