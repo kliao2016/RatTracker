@@ -57,6 +57,10 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
     private Button selectRangeButton;
     private final Map<String, RatReport> reportMap = new HashMap<>();
 
+    public Map<String, RatReport> getReportMap() {
+        return this.reportMap;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -261,14 +265,16 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
      * @param reportMap the map containing information of all rat sightings
      */
     private void loadPinsWithoutRange(Map<String, RatReport> reportMap) {
-        for (Map.Entry<String, RatReport> ratReportEntry : reportMap.entrySet()) {
-            MarkerOptions newReportOptions = new MarkerOptions()
-                    .title("Sighting " + ratReportEntry.getKey())
-                    .position(new LatLng(ratReportEntry.getValue().getLatitude(),
-                            ratReportEntry.getValue().getLongitude()))
-                    .snippet("Sighted: " + ratReportEntry.getValue()
-                            .getDateCreated());
-            mMap.addMarker(newReportOptions);
+        if (reportMap != null) {
+            for (Map.Entry<String, RatReport> ratReportEntry : reportMap.entrySet()) {
+                MarkerOptions newReportOptions = new MarkerOptions()
+                        .title("Sighting " + ratReportEntry.getKey())
+                        .position(new LatLng(ratReportEntry.getValue().getLatitude(),
+                                ratReportEntry.getValue().getLongitude()))
+                        .snippet("Sighted: " + ratReportEntry.getValue()
+                                .getDateCreated());
+                mMap.addMarker(newReportOptions);
+            }
         }
     }
 
