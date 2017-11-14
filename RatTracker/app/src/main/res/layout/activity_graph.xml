@@ -25,7 +25,8 @@
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:max="10"
-        android:padding="4dip"></ProgressBar>
+        android:padding="4dip">
+    </ProgressBar>
 
     <LinearLayout
         android:id="@+id/date_range_linear_layout"

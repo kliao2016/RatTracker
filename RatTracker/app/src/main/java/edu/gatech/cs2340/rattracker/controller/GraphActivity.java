@@ -52,7 +52,7 @@ public class GraphActivity extends AppCompatActivity {
     private static EditText graphEndDate;
     private Button selectRangeButton;
     private static Map<String, RatReport> reportMap = new HashMap<>();
-    private static final Map<String, Integer> graphData = new HashMap<>();
+    private static Map<String, Integer> graphData = new HashMap<>();
     private LineChart chart;
     private List<Entry> entries;
 
@@ -76,6 +76,10 @@ public class GraphActivity extends AppCompatActivity {
         task.execute();
 
         setClickListeners();
+    }
+
+    public static Map<String, Integer> getGraphData() {
+        return graphData;
     }
 
     private String[] parseGraphDates() {
@@ -203,8 +207,7 @@ public class GraphActivity extends AppCompatActivity {
                 Log.d("Date Parse Exception", e.getMessage());
             }
             if (startDate.compareTo(endDate) > 0) {
-                generateDateRangeAlert(
-                );
+                generateDateRangeAlert();
                 graphStartDate.setText("");
                 graphEndDate.setText("");
             } else {
