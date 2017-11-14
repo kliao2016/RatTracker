@@ -1,6 +1,7 @@
 package edu.gatech.cs2340.rattracker.controller;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
@@ -23,13 +24,17 @@ public class ReportDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Bundle bundle = getIntent().getExtras();
-        RatReport report = bundle.getParcelable("RatReport");
-        if (report != null) {
-            getSupportActionBar().setTitle(report.getDateCreated());
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-            populateData(report);
+        if (bundle != null) {
+            RatReport report = bundle.getParcelable("RatReport");
+            if (report != null) {
+                ActionBar actionbar = getSupportActionBar();
+                if (actionbar != null) {
+                    actionbar.setTitle(report.getDateCreated());
+                    actionbar.setDisplayHomeAsUpEnabled(true);
+                    actionbar.setDisplayShowHomeEnabled(true);
+                }
+                populateData(report);
+            }
         }
     }
 

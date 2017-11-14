@@ -196,34 +196,45 @@ public class AddReport extends AppCompatActivity {
 
         /**
          * Method that is called upon closure of the TimePickerFragment
-         * Sets the timeText field to a string in the 12 hour format "HH:MM:SS AM/PM"
+         * Sets the timeText field to a string in the 12 hour format "H:MM:SS AM/PM"
          * @param view the current view
          * @param hourOfDay the hour entered in 24 hr format
          * @param minute the minute entered
          */
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-            String minString = "" + minute;
-            if (minute < 10) {
-                minString = "0" + minString;
-            }
-            String am_pm;
-            String hourString = "" + hourOfDay;
-            if (hourOfDay < 12) {
-                am_pm = "AM";
-                if (hourOfDay == 0) {
-                    hourString = "12";
-                }
-
-            } else {
-                am_pm = "PM";
-                if(hourOfDay != 12) {
-                    hourString = "" + (hourOfDay - 12);
-                }
-            }
             AddReport activity = (AddReport) this.getActivity();
-            activity.setTimeText(hourString + ":" + minString + ":" + "00" + " " + am_pm);
+            activity.setTimeText(activity.convertTime(hourOfDay, minute));
         }
+    }
+
+    /**
+     * Helper method used by the TimePickerFragment to convert an hour and minute to
+     * the format "H:MM:SS AM/PM"
+     * @param hour the hour in 24 hour format
+     * @param minute the minute
+     * @return the formatted string
+     */
+    public String convertTime(int hour, int minute) {
+        String minString = "" + minute;
+        if (minute < 10) {
+            minString = "0" + minString;
+        }
+        String am_pm;
+        String hourString = "" + hour;
+        if (hour < 12) {
+            am_pm = "AM";
+            if (hour == 0) {
+                hourString = "12";
+            }
+
+        } else {
+            am_pm = "PM";
+            if(hour != 12) {
+                hourString = "" + (hour - 12);
+            }
+        }
+        return hourString + ":" + minString + ":" + "00" + " " + am_pm;
     }
 
     /**
