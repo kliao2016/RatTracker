@@ -55,7 +55,7 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
     private EditText startDateText;
     private EditText endDateText;
     private Button selectRangeButton;
-    private final Map<String, RatReport> reportMap = new HashMap<>();
+    private final Map<String, RatReport> reportMap = new HashMap<String, RatReport>();
 
     public Map<String, RatReport> getReportMap() {
         return this.reportMap;

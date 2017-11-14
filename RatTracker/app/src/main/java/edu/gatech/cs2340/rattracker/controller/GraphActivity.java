@@ -1,13 +1,7 @@
 package edu.gatech.cs2340.rattracker.controller;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SimpleDateFormat;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,9 +9,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -27,7 +19,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +27,7 @@ import java.util.Map;
 import edu.gatech.cs2340.rattracker.R;
 import edu.gatech.cs2340.rattracker.model.GraphSightingsTask;
 import edu.gatech.cs2340.rattracker.model.RatReport;
+import edu.gatech.cs2340.rattracker.model.myDatePickerFragment;
 
 /**
  * creates a graph to display rat sightings on a monthly interval between two time spans
@@ -252,12 +244,29 @@ public class GraphActivity extends AppCompatActivity {
     }
 
     /**
+     * sets the text of the startDate EditText box
+     * @param startDate the EditText box
+     */
+    public void setStartDateText(CharSequence startDate) {
+        this.graphStartDate.setText(startDate);
+    }
+
+    /**
+     * sets the text of the startDate EditText box
+     * @param endDate the EditText box
+     */
+    public void setEndDateText(CharSequence endDate) {
+        this.graphEndDate.setText(endDate);
+    }
+
+    /**
      * Displays the DatePickerFragment
      * @param v the current view
      */
     private void showDatePickerDialog(View v) {
         FragmentManager fm = getSupportFragmentManager();
         myDatePickerFragment newFragment = new myDatePickerFragment();
+        newFragment.setMama(this);
         if (v.getId() == R.id.graph_start_date) {
             newFragment.setStart();
         }
@@ -294,54 +303,5 @@ public class GraphActivity extends AppCompatActivity {
         String theString = theText.toString();
         String theTrim = theString.trim();
         return !theTrim.isEmpty();
-    }
-
-    /**
-     * Defines a fragment that is shown when choosing the date that displays a calendar to the user
-     */
-    public static class myDatePickerFragment extends DialogFragment
-            implements DatePickerDialog.OnDateSetListener {
-        private boolean isStart;
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the current date as the default date in the picker
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(
-                    getActivity(),
-                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                    this,
-                    year, month, day);
-            Window datePickerWindow = datePickerDialog.getWindow();
-            assert datePickerWindow != null;
-            datePickerWindow.setBackgroundDrawable(
-                    new ColorDrawable(Color.TRANSPARENT));
-
-            // Create a new instance of DatePickerDialog and return it
-            return datePickerDialog;
-        }
-
-        /**
-         * determines which of the two EditText is affected
-         */
-        public void setStart() {
-            this.isStart = true;
-        }
-
-        @Override
-        public void onDateSet(DatePicker view, int year, int month, int day) {
-            if (isStart) {
-                String theString = (month + 1) + "/" + day + "/" + year;
-                graphStartDate.setText(theString);
-            } else {
-                String theString = (month + 1) + "/" + day + "/" + year;
-                graphEndDate.setText(theString);
-            }
-        }
     }
 }
