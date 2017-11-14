@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SimpleDateFormat;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -19,7 +18,6 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -30,11 +28,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.util.Calendar;
@@ -43,6 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.gatech.cs2340.rattracker.R;
+import edu.gatech.cs2340.rattracker.model.LoadSightingsTask;
 import edu.gatech.cs2340.rattracker.model.RatReport;
 
 /**
@@ -56,13 +50,12 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
     private static final double LATITUDE = 40.713;
     private static final double LONGITUDE = -74.01;
     private static final float ZOOM = 10;
-    private static final int REPORTS = 300;
 
     private GoogleMap mMap;
     private EditText startDateText;
     private EditText endDateText;
     private Button selectRangeButton;
-    private static Map<String, RatReport> reportMap = new HashMap<>();
+    private final Map<String, RatReport> reportMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +77,7 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
 
     /**
      * Private method to check if Google services are available
-     *
+     * <p>
      * Displays a popup dialog if Google services are not available
      */
     private void testGoogleServicesAvailable() {
@@ -103,18 +96,21 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     *
+     * <p>
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
-     *
+     * <p>
      * The map is centered on New York City, where the rat sightings take place
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LoadSightingsTask task = new LoadSightingsTask();
-        task.execute();
+        Map<String, RatReport>[] asyncParams = (Map<String, RatReport>[]) new Map[1];
+        asyncParams[0] = reportMap;
+        LoadSightingsTask asyncTask = new LoadSightingsTask();
+        asyncTask.execute(asyncParams);
 
         // Center maps on geographic center of NY
         LatLng ny = new LatLng(LATITUDE, LONGITUDE);
@@ -142,6 +138,7 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
 
     /**
      * Displays the DatePickerFragment
+     *
      * @param v the current view
      */
     private void showDatePickerDialog(View v) {
@@ -182,12 +179,17 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
         });
     }
 
-    private void setStartDateText(CharSequence startDate) { this.startDateText.setText(startDate); }
+    private void setStartDateText(CharSequence startDate) {
+        this.startDateText.setText(startDate);
+    }
 
-    private void setEndDateText(CharSequence endDate) { this.endDateText.setText(endDate); }
+    private void setEndDateText(CharSequence endDate) {
+        this.endDateText.setText(endDate);
+    }
 
     /**
      * Method to load rat sightings from database and display them on map
+     *
      * @param googleMap the map to be displayed
      */
     private void loadSightings(GoogleMap googleMap) {
@@ -221,14 +223,14 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
      *
      * @param reportMap the map containing info of all the rat sightings
      * @param startDate the starting date of the date range
-     * @param endDate the ending date of the date range
+     * @param endDate   the ending date of the date range
      * @param formatter the formatter to convert a string to a date
      */
     private void loadPinsFromRange(Map<String, RatReport> reportMap,
-                                        Date startDate,
-                                        Date endDate,
-                                        SimpleDateFormat formatter) {
-        for (Map.Entry<String, RatReport> ratReportEntry: reportMap.entrySet()) {
+                                   Date startDate,
+                                   Date endDate,
+                                   SimpleDateFormat formatter) {
+        for (Map.Entry<String, RatReport> ratReportEntry : reportMap.entrySet()) {
             if (ratReportEntry != null) {
                 String dateCreated = ratReportEntry.getValue().getDateCreated();
                 String dateTrimmed = dateCreated.substring(0,
@@ -259,7 +261,7 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
      * @param reportMap the map containing information of all rat sightings
      */
     private void loadPinsWithoutRange(Map<String, RatReport> reportMap) {
-        for (Map.Entry<String, RatReport> ratReportEntry: reportMap.entrySet()) {
+        for (Map.Entry<String, RatReport> ratReportEntry : reportMap.entrySet()) {
             MarkerOptions newReportOptions = new MarkerOptions()
                     .title("Sighting " + ratReportEntry.getKey())
                     .position(new LatLng(ratReportEntry.getValue().getLatitude(),
@@ -333,50 +335,4 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
         }
     }
 
-    /**
-     * Inner class that is an async task that loads rat sighting data before being displayed
-     */
-    private class LoadSightingsTask extends AsyncTask<Void, Void, Map<String, RatReport>> {
-        private ProgressBar progress;
-        private Map<String, RatReport> asyncMap;
-
-        private final Query DATABASE = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("reports")
-                .limitToLast(REPORTS);
-
-        @Override
-        protected void onPreExecute() {
-            asyncMap = new HashMap<>();
-            progress = findViewById(R.id.rat_map_progress_bar);
-            progress.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Map<String, RatReport> doInBackground(Void... voids) {
-            DATABASE.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot ratSnapshot: dataSnapshot.getChildren()) {
-                        RatReport ratReport = ratSnapshot.getValue(RatReport.class);
-                        if (ratReport != null) {
-                            asyncMap.put(ratSnapshot.getKey(), ratReport);
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-            return asyncMap;
-        }
-
-        @Override
-        protected void onPostExecute(Map<String, RatReport> ratReports) {
-            RatMapActivity.reportMap = ratReports;
-            progress.setVisibility(View.GONE);
-        }
-    }
 }
