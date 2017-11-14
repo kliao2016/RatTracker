@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.gatech.cs2340.rattracker.R;
+import edu.gatech.cs2340.rattracker.model.GraphSightingsTask;
 import edu.gatech.cs2340.rattracker.model.RatReport;
 
 /**
@@ -52,7 +53,7 @@ public class GraphActivity extends AppCompatActivity {
     private static EditText graphEndDate;
     private Button selectRangeButton;
     private static Map<String, RatReport> reportMap = new HashMap<>();
-    private static Map<String, Integer> graphData = new HashMap<>();
+    private static final Map<String, Integer> graphData = new HashMap<>();
     private LineChart chart;
     private List<Entry> entries;
 
@@ -72,12 +73,16 @@ public class GraphActivity extends AppCompatActivity {
         selectRangeButton = findViewById(R.id.graph_date_button);
 
         //pulls ratReports from FireBase and populates reportMap with them
-        LoadSightingsTask task = new LoadSightingsTask();
+        GraphSightingsTask task = new GraphSightingsTask();
         task.execute();
 
         setClickListeners();
     }
 
+    /**
+     * getter for KyleTest JUnit test
+     * @return the graphData Hash Map
+     */
     public static Map<String, Integer> getGraphData() {
         return graphData;
     }
@@ -341,53 +346,6 @@ public class GraphActivity extends AppCompatActivity {
                 String theString = (month + 1) + "/" + day + "/" + year;
                 graphEndDate.setText(theString);
             }
-        }
-    }
-
-    /**
-     * Inner class that is an async task that loads rat sighting data before being displayed
-     */
-    private class LoadSightingsTask extends AsyncTask<Void, Void, Map<String, RatReport>> {
-        private ProgressBar progress;
-        private final Map<String, RatReport> asyncMap = new HashMap<>();
-
-        //final int instanceCap = 300;
-        private final Query databaseRef = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("reports");
-                //.limitToLast(instanceCap);
-
-        @Override
-        protected void onPreExecute() {
-            progress = findViewById(R.id.graph_progress_bar);
-            progress.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Map<String, RatReport> doInBackground(Void... voids) {
-            databaseRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot ratSnapshot: dataSnapshot.getChildren()) {
-                        RatReport ratReport = ratSnapshot.getValue(RatReport.class);
-                        if (ratReport != null) {
-                            asyncMap.put(ratSnapshot.getKey(), ratReport);
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-            return asyncMap;
-        }
-
-        @Override
-        protected void onPostExecute(Map<String, RatReport> ratReports) {
-            reportMap = asyncMap;
-            progress.setVisibility(View.GONE);
         }
     }
 }
