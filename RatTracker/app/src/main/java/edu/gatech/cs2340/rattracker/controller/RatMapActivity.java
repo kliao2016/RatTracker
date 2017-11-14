@@ -57,6 +57,11 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
     private Button selectRangeButton;
     private final Map<String, RatReport> reportMap = new HashMap<String, RatReport>();
 
+    /**
+     * Getter to return a HashMap of all rat sighting info
+     *
+     * @return the HashMap of all rat sighting info
+     */
     public Map<String, RatReport> getReportMap() {
         return this.reportMap;
     }
