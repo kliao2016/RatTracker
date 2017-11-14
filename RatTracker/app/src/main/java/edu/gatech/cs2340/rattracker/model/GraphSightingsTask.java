@@ -19,31 +19,34 @@ import java.util.Map;
 /**
  * Inner class that is an async task that loads rat sighting data before being displayed
  */
-public class GraphSightingsTask extends AsyncTask<Void, Void, Map<String, RatReport>> {
-    private final Map<String, RatReport> asyncMap = new HashMap<>();
+public class GraphSightingsTask extends AsyncTask<Map<String, RatReport>, Void, Void> {
+    private final Map<String, RatReport> asyncMap = new HashMap<String, RatReport>();
 
     private final Query databaseRef = FirebaseDatabase.getInstance()
             .getReference()
             .child("reports");
 
     @Override
-    protected Map<String, RatReport> doInBackground(Void... voids) {
-        databaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ratSnapshot: dataSnapshot.getChildren()) {
-                    RatReport ratReport = ratSnapshot.getValue(RatReport.class);
-                    if (ratReport != null) {
-                        asyncMap.put(ratSnapshot.getKey(), ratReport);
+    protected Void doInBackground(Map<String, RatReport>[] maps) {
+        final Map<String, RatReport> asyncMap = maps[0];
+        if (asyncMap != null) {
+            databaseRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot ratSnapshot : dataSnapshot.getChildren()) {
+                        RatReport ratReport = ratSnapshot.getValue(RatReport.class);
+                        if (ratReport != null) {
+                            asyncMap.put(ratSnapshot.getKey(), ratReport);
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-        return asyncMap;
+                }
+            });
+        }
+        return null;
     }
 }

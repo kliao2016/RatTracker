@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SimpleDateFormat;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -20,17 +19,11 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -49,15 +42,16 @@ import edu.gatech.cs2340.rattracker.model.RatReport;
  */
 public class GraphActivity extends AppCompatActivity {
 
-    private static EditText graphStartDate;
-    private static EditText graphEndDate;
+    private EditText graphStartDate;
+    private EditText graphEndDate;
     private Button selectRangeButton;
-    private static Map<String, RatReport> reportMap = new HashMap<>();
-    private static final Map<String, Integer> graphData = new HashMap<>();
+    private static final Map<String, RatReport> reportMap = new HashMap<String, RatReport>();
+    private static final Map<String, Integer> graphData = new HashMap<String, Integer>();
     private LineChart chart;
     private List<Entry> entries;
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -73,8 +67,10 @@ public class GraphActivity extends AppCompatActivity {
         selectRangeButton = findViewById(R.id.graph_date_button);
 
         //pulls ratReports from FireBase and populates reportMap with them
-        GraphSightingsTask task = new GraphSightingsTask();
-        task.execute();
+        Map<String, RatReport>[] asyncParams = (Map<String, RatReport>[]) new Map[1];
+        asyncParams[0] = reportMap;
+        GraphSightingsTask asyncTask = new GraphSightingsTask();
+        asyncTask.execute(asyncParams);
 
         setClickListeners();
     }
@@ -141,7 +137,7 @@ public class GraphActivity extends AppCompatActivity {
     }
 
     private void setChartValues() {
-        entries = new ArrayList<>();
+        entries = new ArrayList<Entry>();
         String[] importantDates = parseGraphDates();
         int startMonthValue = Integer.parseInt(importantDates[0]);
         int startYearValue = Integer.parseInt(importantDates[1]);
