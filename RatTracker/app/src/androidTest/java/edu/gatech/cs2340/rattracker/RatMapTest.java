@@ -1,19 +1,14 @@
 package edu.gatech.cs2340.rattracker;
 
 import android.support.test.rule.ActivityTestRule;
-import android.content.Context;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.ActivityInstrumentationTestCase2;
 import android.widget.EditText;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import edu.gatech.cs2340.rattracker.controller.GraphActivity;
 import edu.gatech.cs2340.rattracker.controller.RatMapActivity;
-import edu.gatech.cs2340.rattracker.model.MapDatePickerFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
