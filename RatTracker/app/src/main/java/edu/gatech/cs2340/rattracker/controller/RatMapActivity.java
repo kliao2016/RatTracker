@@ -22,7 +22,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -210,40 +209,64 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
                 startDateText.setText("");
                 endDateText.setText("");
             } else {
-                for (Map.Entry<String, RatReport> ratReportEntry: reportMap.entrySet()) {
-                    if (ratReportEntry != null) {
-                        String dateCreated = ratReportEntry.getValue().getDateCreated();
-                        String dateTrimmed = dateCreated.substring(0,
-                                dateCreated.indexOf(' '));
-                        Date ratEntryDate = new Date();
-                        try {
-                            ratEntryDate = formatter.parse(dateTrimmed);
-                        } catch (ParseException e) {
-                            Log.d("Date Parse Exception", e.getMessage());
-                        }
-                        if ((ratEntryDate.compareTo(startDate) >= 0)
-                                && (ratEntryDate.compareTo(endDate) <= 0)) {
-                            MarkerOptions newReportOptions = new MarkerOptions()
-                                    .title("Sighting " + ratReportEntry.getKey())
-                                    .position(new LatLng(ratReportEntry.getValue().getLatitude(),
-                                            ratReportEntry.getValue().getLongitude()))
-                                    .snippet("Sighted: " + ratReportEntry.getValue()
-                                            .getDateCreated());
-                            mMap.addMarker(newReportOptions);
-                        }
-                    }
-                }
+                loadPinsFromRange(reportMap, startDate, endDate, formatter);
             }
         } else {
-            for (Map.Entry<String, RatReport> ratReportEntry: reportMap.entrySet()) {
-                MarkerOptions newReportOptions = new MarkerOptions()
-                        .title("Sighting " + ratReportEntry.getKey())
-                        .position(new LatLng(ratReportEntry.getValue().getLatitude(),
-                                ratReportEntry.getValue().getLongitude()))
-                        .snippet("Sighted: " + ratReportEntry.getValue()
-                                .getDateCreated());
-                mMap.addMarker(newReportOptions);
+            loadPinsWithoutRange(reportMap);
+        }
+    }
+
+    /**
+     * Method to load pins from a date range onto the Google Map
+     *
+     * @param reportMap the map containing info of all the rat sightings
+     * @param startDate the starting date of the date range
+     * @param endDate the ending date of the date range
+     * @param formatter the formatter to convert a string to a date
+     */
+    private void loadPinsFromRange(Map<String, RatReport> reportMap,
+                                        Date startDate,
+                                        Date endDate,
+                                        SimpleDateFormat formatter) {
+        for (Map.Entry<String, RatReport> ratReportEntry: reportMap.entrySet()) {
+            if (ratReportEntry != null) {
+                String dateCreated = ratReportEntry.getValue().getDateCreated();
+                String dateTrimmed = dateCreated.substring(0,
+                        dateCreated.indexOf(' '));
+                Date ratEntryDate = new Date();
+                try {
+                    ratEntryDate = formatter.parse(dateTrimmed);
+                } catch (ParseException e) {
+                    Log.d("Date Parse Exception", e.getMessage());
+                }
+                if ((ratEntryDate.compareTo(startDate) >= 0)
+                        && (ratEntryDate.compareTo(endDate) <= 0)) {
+                    MarkerOptions newReportOptions = new MarkerOptions()
+                            .title("Sighting " + ratReportEntry.getKey())
+                            .position(new LatLng(ratReportEntry.getValue().getLatitude(),
+                                    ratReportEntry.getValue().getLongitude()))
+                            .snippet("Sighted: " + ratReportEntry.getValue()
+                                    .getDateCreated());
+                    mMap.addMarker(newReportOptions);
+                }
             }
+        }
+    }
+
+    /**
+     * Function to load pins from map without a specified date range
+     *
+     * @param reportMap the map containing information of all rat sightings
+     */
+    private void loadPinsWithoutRange(Map<String, RatReport> reportMap) {
+        for (Map.Entry<String, RatReport> ratReportEntry: reportMap.entrySet()) {
+            MarkerOptions newReportOptions = new MarkerOptions()
+                    .title("Sighting " + ratReportEntry.getKey())
+                    .position(new LatLng(ratReportEntry.getValue().getLatitude(),
+                            ratReportEntry.getValue().getLongitude()))
+                    .snippet("Sighted: " + ratReportEntry.getValue()
+                            .getDateCreated());
+            mMap.addMarker(newReportOptions);
         }
     }
 
