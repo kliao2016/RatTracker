@@ -4,7 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by kevinliao on 10/7/17.
+ * Created by Kevin Liao on 10/7/17.
+ *
+ * Represents a rat report filed by a user
  */
 
 public class RatReport implements Parcelable {
@@ -47,74 +49,110 @@ public class RatReport implements Parcelable {
         this.longitude = longitude;
     }
 
+
     // Getters
+
+    /**
+     * @return the date the report was created
+     */
     public String getDateCreated() {
         return this.dateCreated;
     }
-
+    /**
+     * @return the the location type of the report
+     */
     public String getLocationType() {
         return this.locationType;
     }
-
+    /**
+     * @return the zip for the report
+     */
     public double getIncidentZip() {
         return this.incidentZip;
     }
-
+    /**
+     * @return the address for the report
+     */
     public String getIncidentAddress() {
         return this.incidentAddress;
     }
 
-    public String getCity() {
-        return this.city;
-    }
-
+    /**
+     * @return the borough for the report
+     */
     public String getBorough() {
         return this.borough;
     }
-
+    /**
+     * @return the latitude for the report
+     */
     public double getLatitude() {
         return this.latitude;
     }
-
+    /**
+     * @return the longitude for the report
+     */
     public double getLongitude() {
         return this.longitude;
     }
 
 
+
     // Setters
+
+    /**
+     * Sets date created
+     * @param dateCreated the date created
+     */
     public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
     }
 
+    /**
+     * sets the location type
+     * @param locationType the location type
+     */
     public void setLocationType(String locationType) {
         this.locationType = locationType;
     }
 
+    /**
+     * sets the zipcode of the sighting
+     * @param incidentZip the zipcode
+     */
     public void setIncidentZip(double incidentZip) {
         this.incidentZip = incidentZip;
     }
 
+    /**
+     * sets the incident address
+     * @param incidentAddress the incident address
+     */
     public void setIncidentAddress(String incidentAddress) {
         this.incidentAddress = incidentAddress;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
+    /**
+     * @param borough the borough to be set
+     */
     public void setBorough(String borough) {
         this.borough = borough;
     }
 
+    /**
+     * @param latitude the latitude to be set
+     */
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
+    /**
+     * @param longitude the longitude to be set
+     */
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    //toString
     @Override
     public String toString() {
         return "Rat Report: " + dateCreated + " at " + incidentAddress + ", "
@@ -145,7 +183,7 @@ public class RatReport implements Parcelable {
     /**
      * Method that writes the report's data to a Parcel
      * @param dest the parcel to write to
-     * @param flags
+     * @param flags the flag that defines ow the object is created
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
@@ -160,14 +198,16 @@ public class RatReport implements Parcelable {
     }
 
     /**
-     * Creator class defined for Parcelable implementation that generates instances of RatReport from passed in Parcels
+     * Creator class defined for Parcelable implementation that generates
+     * instances of RatReport from passed in Parcels
      */
     public static final Parcelable.Creator<RatReport> CREATOR
             = new Parcelable.Creator<RatReport>() {
+        @Override
         public RatReport createFromParcel(Parcel in) {
             return new RatReport(in);
         }
-
+        @Override
         public RatReport[] newArray(int size) {
             return new RatReport[size];
         }
