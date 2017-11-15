@@ -28,12 +28,22 @@ public class KyleTest {
     //tests if the GraphActivity catches occurrences when the start date
     //is later than the end date
     @Test
-    public void testGraphDateInputs() {
+    public void testBadGraphDateInputs() {
         onView(withId(R.id.graph_start_date))
                 .perform(replaceText("10/10/2016"), closeSoftKeyboard());
         onView(withId(R.id.graph_end_date))
                 .perform(replaceText("10/10/2015"), closeSoftKeyboard());
         onView(withId(R.id.graph_date_button)).perform(click());
         assertTrue(GraphActivity.getGraphData().isEmpty());
+    }
+
+    @Test
+    public void testGoodGraphDateInputs() {
+        onView(withId(R.id.graph_start_date))
+                .perform(replaceText("10/10/2015"), closeSoftKeyboard());
+        onView(withId(R.id.graph_end_date))
+                .perform(replaceText("10/10/2016"), closeSoftKeyboard());
+        onView(withId(R.id.graph_date_button)).perform(click());
+        assertFalse(GraphActivity.getGraphData().isEmpty());
     }
 }
