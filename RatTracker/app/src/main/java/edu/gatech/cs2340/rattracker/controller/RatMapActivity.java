@@ -304,7 +304,7 @@ public class RatMapActivity extends FragmentActivity implements OnMapReadyCallba
      */
     private boolean isFilled(EditText editText) {
         // Cannot call toString().isEmpty() because it doesn't account for whitespace
-        return editText.getText().toString().trim().length() != 0;
+        return editText.getText().toString().trim().isEmpty();
     }
 
 }

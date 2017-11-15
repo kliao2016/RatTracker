@@ -37,8 +37,8 @@ public class GraphActivity extends AppCompatActivity {
     private EditText graphStartDate;
     private EditText graphEndDate;
     private Button selectRangeButton;
-    private static final Map<String, RatReport> reportMap = new HashMap<String, RatReport>();
-    private static final Map<String, Integer> graphData = new HashMap<String, Integer>();
+    private static final Map<String, RatReport> reportMap = new HashMap<>();
+    private static final Map<String, Integer> graphData = new HashMap<>();
     private LineChart chart;
     private List<Entry> entries;
 
@@ -129,7 +129,7 @@ public class GraphActivity extends AppCompatActivity {
     }
 
     private void setChartValues() {
-        entries = new ArrayList<Entry>();
+        entries = new ArrayList<>();
         String[] importantDates = parseGraphDates();
         int startMonthValue = Integer.parseInt(importantDates[0]);
         int startYearValue = Integer.parseInt(importantDates[1]);
