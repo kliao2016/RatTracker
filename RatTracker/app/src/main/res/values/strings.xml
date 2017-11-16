@@ -46,6 +46,9 @@
     <string name="select_borough">Select Borough</string>
     <string name="add_report">Add Report</string>
     <string name="cancel">Cancel</string>
+    <string name="invalid_date">Invalid input: you must enter a date</string>
+    <string name="invalid_time">Invalid input: you must enter a time</string>
+    <string name="invalid_address">Invalid input: you must enter a address</string>
 
     <!-- Map Strings -->
     <string name="date_range_title">Select Date Range</string>

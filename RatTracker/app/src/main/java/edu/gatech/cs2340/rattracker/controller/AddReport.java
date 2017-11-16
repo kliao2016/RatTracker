@@ -255,16 +255,19 @@ public class AddReport extends AppCompatActivity {
 
         String toastMessage = "";
         if (!dateV) {
-            toastMessage = "you must enter a date";
+            toastMessage = getResources().getString(R.string.invalid_date);
+//            toastMessage = "you must enter a date";
         } else if(!timeV) {
-            toastMessage = "you must enter a time";
+            toastMessage = getResources().getString(R.string.invalid_time);
+
         } else if(!addressV) {
-            toastMessage = "you must enter an address";
+            toastMessage = getResources().getString(R.string.invalid_address);
+
         }
 
         boolean isValid = dateV && timeV && addressV;
         if (!isValid) {
-            Toast.makeText(this, "Invalid input: " + toastMessage, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
         }
         return isValid;
     }
